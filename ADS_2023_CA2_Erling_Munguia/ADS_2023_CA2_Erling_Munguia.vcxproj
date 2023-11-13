@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DList.h" />
+    <ClInclude Include="DListIterator.h" />
+    <ClInclude Include="DListNode.h" />
+    <ClInclude Include="Tree.h" />
+    <ClInclude Include="TreeIterator.h" />
     <ClInclude Include="XMLParser.h" />
   </ItemGroup>
   <ItemGroup>
