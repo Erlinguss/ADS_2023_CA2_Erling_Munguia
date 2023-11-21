@@ -9,6 +9,44 @@ using namespace std;
 #include "SFML/Graphics.hpp"
 
 
+// === Implementation of XMLParser ===
+bool XMLParser::validateXML(const string& xmlDocument) {
+    stack<string> tagStack;
+    bool hasRoot = false;
+
+    for (size_t i = 0; i < xmlDocument.size(); ++i) {
+        if (xmlDocument[i] == '<') {
+            size_t start = i + 1;
+            size_t end = xmlDocument.find('>', start);
+            if (end == string::npos) {
+                return false;
+            }
+
+            string tag = xmlDocument.substr(start, end - start);
+            if (tag.empty()) {
+                return false;
+            }
+
+            if (tag[0] == '/') {
+                if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
+                    return false;
+                }
+                tagStack.pop();
+            }
+            else {
+                if (!hasRoot) {
+                    hasRoot = true;
+                }
+                else {
+                    tagStack.push(tag);
+                }
+            }
+            i = end;
+        }
+    }
+
+    return tagStack.empty() && hasRoot;
+}
 
 int main() {
     const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
