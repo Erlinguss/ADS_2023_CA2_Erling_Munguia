@@ -9,35 +9,19 @@ using namespace std;
 #include "SFML/Graphics.hpp"
 
 
-// ===== Function to print the tree structure =====
-void printTree(Tree<string>* node, int level = 0) {
-    if (node == nullptr) {
-        return;
-    }
 
-    for (int i = 0; i < level; ++i) {
-        cout << "  ";
-    }
-    cout << node->data << endl;
-
-    DListIterator<Tree<string>*> childIter = node->children->getIterator();
-    while (childIter.isValid()) {
-        printTree(childIter.item(), level + 1);
-        childIter.advance();
-    }
-}
 
 // ========= Implementation of XMLParser ============
 bool XMLParser::validateXML(const string& xmlDocument) {
     stack<string> tagStack;
     bool hasRoot = false;
-    //cout << xmlDocument << endl;
+    
     for (size_t i = 0; i < xmlDocument.size(); ++i) {
        
         if (xmlDocument[i] == '<') {
             size_t start = i + 1;
             size_t end = xmlDocument.find('>', start);
-           // cout << start << " " << end;
+         
             if (end == string::npos) {
                 return false;
             }
@@ -49,7 +33,7 @@ bool XMLParser::validateXML(const string& xmlDocument) {
 
             if (tag[0] == '/') {
                 if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
-                  //  cout << tag << endl;
+               
                     return false;
                 }
                 tagStack.pop();
@@ -59,9 +43,9 @@ bool XMLParser::validateXML(const string& xmlDocument) {
                     hasRoot = true;
                 }
                 //else {
-                cout << tag<<endl;
-                    tagStack.push(tag);
-                //}
+               // cout << tag << endl;
+                tagStack.push(tag);
+               // }
             }
             i = end;
         }
@@ -73,8 +57,9 @@ bool XMLParser::validateXML(const string& xmlDocument) {
 // ============== Built XML Tree =====================
 void XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<string>*> nodeStack;
+    size_t i = 0;
 
-    for (size_t i = 0; i < xmlDocument.size(); ++i) {
+    while (i < xmlDocument.size()) {
         if (xmlDocument[i] == '<') {
             size_t start = i + 1;
             size_t end = xmlDocument.find('>', start);
@@ -88,11 +73,10 @@ void XMLParser::builtTree(const string& xmlDocument) {
             }
 
             if (tag[0] != '/') {
-
                 Tree<string>* newNode = new Tree<string>(tag);
                 if (!nodeStack.empty()) {
                     Tree<string>* parent = nodeStack.top();
-                    parent->children->append(newNode);
+                    parent->children.append(newNode);
                     newNode->parent = parent;
                 }
                 else {
@@ -104,8 +88,31 @@ void XMLParser::builtTree(const string& xmlDocument) {
                 nodeStack.pop();
             }
 
-            i = end;
+            i = end + 1;
         }
+        else {
+            ++i;  // === Skip non tag characters ===
+        }
+    }
+}
+
+// ===== Function to print the tree structure =====
+void printTree(Tree<string>* node, int level = 0) {
+    if (node == nullptr) {
+        return;
+    }
+
+    for (int i = 0; i < level; ++i) {
+        cout << "  ";
+    }
+    cout << node->data << endl;
+
+    //DListIterator<Tree<string>*> childIter = node->children->getIterator();
+    DListIterator<Tree<string>*> childIter = node->children.getIterator();
+
+    while (childIter.isValid()) {
+        printTree(childIter.item(), level + 1);
+        childIter.advance();
     }
 }
 
@@ -114,9 +121,7 @@ root(nullptr) {}
 
 void XMLParser::parse() {
     ifstream file(xmlFileName);
-    //stringstream buffer;
-   // buffer << file.rdbuf();
-    string xmlDocument="";// = buffer.str();
+    string xmlDocument="";
     string line;
     while (getline(file, line))
     {
@@ -134,11 +139,12 @@ void XMLParser::parse() {
     printTree(root);
 }
 
+
 int main() {
     const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
-    // XMLParser builtTree(const string & xmlDocument);
+
    
    return 0;
 }

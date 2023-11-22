@@ -4,33 +4,51 @@
 template<class T>
 class Tree
 {
-public: 
-	T data;
-	Tree<T> *parent;
-	DList<Tree<T>*> *children;
-	Tree(T item);
-	int count();
-	T getData();
-	Tree<T> *getRoot();
+public:
+    T data;
+    Tree<T>* parent;
+    DList<Tree<T>*> children;
+
+    Tree(T item);
+
+    int count() const;
+    T getData() const;
+    Tree<T>* getRoot();
 };
+
 template <class T>
-T Tree<T>::getData()
+T Tree<T>::getData() const
 {
-	return data;
-}
-template <class T>
-Tree<T>::Tree(T item)
-{
-	
+    return data;
 }
 
 template <class T>
-int Tree<T>::count()
+Tree<T>::Tree(T item) : data(item), parent(nullptr)
 {
-	return 0;
+    
+
 }
 
 template <class T>
-Tree<T>*Tree<T>::getRoot() {
-	return this;
+int Tree<T>::count() const
+{
+    int totalCount = 1; // === Start with the current node ===
+    DListIterator<Tree<T>*> childIter = children.getIterator();
+    while (childIter.isValid())
+    {
+        totalCount += childIter.item()->count();
+        childIter.advance();
+    }
+    return totalCount;
+}
+
+template <class T>
+Tree<T>* Tree<T>::getRoot()
+{
+    Tree<T>* currentNode = this;
+    while (currentNode->parent != nullptr)
+    {
+        currentNode = currentNode->parent;
+    }
+    return currentNode;
 }
