@@ -18,19 +18,7 @@ private:
 
     bool validateXML(const string& xmlDocument);
     void builtTree(const string& xmlDocument);
+
+
 };
-
-
-
-
-//XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName), root(nullptr)
-//{
-
-//}
-
-//void XMLParser::parse()
-//{
-
-//}
-
 

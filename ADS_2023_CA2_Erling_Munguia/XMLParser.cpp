@@ -31,11 +31,13 @@ void printTree(Tree<string>* node, int level = 0) {
 bool XMLParser::validateXML(const string& xmlDocument) {
     stack<string> tagStack;
     bool hasRoot = false;
-
+    //cout << xmlDocument << endl;
     for (size_t i = 0; i < xmlDocument.size(); ++i) {
+       
         if (xmlDocument[i] == '<') {
             size_t start = i + 1;
             size_t end = xmlDocument.find('>', start);
+           // cout << start << " " << end;
             if (end == string::npos) {
                 return false;
             }
@@ -47,6 +49,7 @@ bool XMLParser::validateXML(const string& xmlDocument) {
 
             if (tag[0] == '/') {
                 if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
+                  //  cout << tag << endl;
                     return false;
                 }
                 tagStack.pop();
@@ -55,15 +58,16 @@ bool XMLParser::validateXML(const string& xmlDocument) {
                 if (!hasRoot) {
                     hasRoot = true;
                 }
-                else {
+                //else {
+                cout << tag<<endl;
                     tagStack.push(tag);
-                }
+                //}
             }
             i = end;
         }
     }
-
-    return tagStack.empty() && hasRoot;
+   // cout << tagStack.<<endl;
+    return tagStack.empty();
 }
 
 // ============== Built XML Tree =====================
@@ -110,9 +114,14 @@ root(nullptr) {}
 
 void XMLParser::parse() {
     ifstream file(xmlFileName);
-    stringstream buffer;
-    buffer << file.rdbuf();
-    string xmlDocument = buffer.str();
+    //stringstream buffer;
+   // buffer << file.rdbuf();
+    string xmlDocument="";// = buffer.str();
+    string line;
+    while (getline(file, line))
+    {
+         xmlDocument += line;
+    }
 
     if (!validateXML(xmlDocument)) {
         cout << "Invalid XML document." << endl;
@@ -126,7 +135,7 @@ void XMLParser::parse() {
 }
 
 int main() {
-    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
+    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
     // XMLParser builtTree(const string & xmlDocument);

@@ -1,0 +1,162 @@
+<teslaModels>
+  <model>
+    <name>ModelS</name>
+    <year>
+      <version>
+        <name>Standard Range Plus</name>
+        <file>
+          <name>2023_ModelS_SR+.xml</name>
+          <length>2500 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelS_SR+.xml</name>
+          <length>2400 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Long Range</name>
+        <file>
+          <name>2023_ModelS_LongRange.xml</name>
+          <length>2600 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelS_LongRange.xml</name>
+          <length>2550 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Plaid</name>
+        <file>
+          <name>2023_ModelS_Plaid.xml</name>
+          <length>2700 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelS_Plaid.xml</name>
+          <length>2650 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+    </year>
+  </model>
+
+  <model>
+    <name>Model3</name>
+    <year>
+      <version>
+        <name>Standard Range Plus</name>
+        <file>
+          <name>2023_Model3_SR+.xml</name>
+          <length>2200 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_Model3_SR+.xml</name>
+          <length>2100 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Long Range</name>
+        <file>
+          <name>2023_Model3_LongRange.xml</name>
+          <length>2350 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_Model3_LongRange.xml</name>
+          <length>2300 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Performance</name>
+        <file>
+          <name>2023_Model3_Performance.xml</name>
+          <length>2400 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_Model3_Performance.xml</name>
+          <length>2350 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+    </year>
+  </model>
+
+  <model>
+    <name>ModelX</name>
+    <year>
+      <version>
+        <name>Long Range</name>
+        <file>
+          <name>2023_ModelX_LongRange.xml</name>
+          <length>2800 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelX_LongRange.xml</name>
+          <length>2750 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Plaid</name>
+        <file>
+          <name>2023_ModelX_Plaid.xml</name>
+          <length>2900 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelX_Plaid.xml</name>
+          <length>2850 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+    </year>
+  </model>
+
+  <model>
+    <name>ModelY</name>
+    <year>
+      <version>
+        <name>Long Range</name>
+        <file>
+          <name>2023_ModelY_LongRange.xml</name>
+          <length>2500 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelY_LongRange.xml</name>
+          <length>2450 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+      
+      <version>
+        <name>Performance</name>
+        <file>
+          <name>2023_ModelY_Performance.xml</name>
+          <length>2600 kb</length>
+          <type>specification</type>
+        </file>
+        <file>
+          <name>2022_ModelY_Performance.xml</name>
+          <length>2550 kb</length>
+          <type>specification</type>
+        </file>
+      </version>
+    </year>
+  </model>
+</teslaModels>
+
