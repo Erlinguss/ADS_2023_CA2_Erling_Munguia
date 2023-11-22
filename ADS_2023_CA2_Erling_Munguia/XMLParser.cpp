@@ -105,10 +105,25 @@ void XMLParser::builtTree(const string& xmlDocument) {
     }
 }
 
-XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName), root(nullptr) {}
+XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
+root(nullptr) {}
 
+void XMLParser::parse() {
+    ifstream file(xmlFileName);
+    stringstream buffer;
+    buffer << file.rdbuf();
+    string xmlDocument = buffer.str();
 
+    if (!validateXML(xmlDocument)) {
+        cout << "Invalid XML document." << endl;
+        return;
+    }
 
+    builtTree(xmlDocument);
+
+    cout << "Tree structure:" << endl;
+    printTree(root);
+}
 
 int main() {
     const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
