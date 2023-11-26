@@ -33,6 +33,9 @@
     <ClInclude Include="TreeIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="structure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XMLParser.cpp">

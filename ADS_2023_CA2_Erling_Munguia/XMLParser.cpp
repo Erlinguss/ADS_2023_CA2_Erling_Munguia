@@ -1,5 +1,6 @@
 #include "XMLParser.h"
 #include "Tree.h"
+#include "structure.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -9,9 +10,7 @@ using namespace std;
 #include "SFML/Graphics.hpp"
 
 
-
-
-// ========= Implementation of XMLParser ============
+// ========= Implementation of XMLParser Validation ============
 bool XMLParser::validateXML(const string& xmlDocument) {
     stack<string> tagStack;
     bool hasRoot = false;
@@ -54,11 +53,12 @@ bool XMLParser::validateXML(const string& xmlDocument) {
     return tagStack.empty();
 }
 
-// ============== Built XML Tree =====================
+// ============== Built XML Tree ===================== 
 void XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<string>*> nodeStack;
     size_t i = 0;
 
+  try {
     while (i < xmlDocument.size()) {
         if (xmlDocument[i] == '<') {
             size_t start = i + 1;
@@ -67,6 +67,14 @@ void XMLParser::builtTree(const string& xmlDocument) {
                 return;
             }
 
+            start = contents.find;
+                name = contents.find;
+
+                if (name = "div") {
+                else if (name = "/div") {}
+
+                else if (name = none) {} 
+                }
             string tag = xmlDocument.substr(start, end - start);
             if (tag.empty()) {
                 return;
@@ -94,6 +102,10 @@ void XMLParser::builtTree(const string& xmlDocument) {
             ++i;  // === Skip non tag characters ===
         }
     }
+  }
+    catch (const exception& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
 }
 
 // ===== Function to print the tree structure =====
@@ -119,6 +131,7 @@ void printTree(Tree<string>* node, int level = 0) {
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
 
+
 void XMLParser::parse() {
     ifstream file(xmlFileName);
     string xmlDocument="";
@@ -129,9 +142,9 @@ void XMLParser::parse() {
     }
 
     if (!validateXML(xmlDocument)) {
-        cout << "Invalid XML document." << endl;
-        return;
-    }
+       cout << "Invalid XML document." << endl;
+       return;
+     }
 
     builtTree(xmlDocument);
 
@@ -139,9 +152,8 @@ void XMLParser::parse() {
     printTree(root);
 }
 
-
 int main() {
-    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
 
