@@ -52,6 +52,8 @@ bool XMLParser::validateXML(const string& xmlDocument) {
    // cout << tagStack.<<endl;
     return tagStack.empty();
 }
+
+
 void XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<string>*> nodeStack;
     size_t i = 0;
@@ -86,12 +88,14 @@ void XMLParser::builtTree(const string& xmlDocument) {
                     nodeStack.pop();
                 }
 
-                // Extract data inside tags and print
+                // === Extract data inside tags and append to the corresponding node ===
                 size_t dataStart = end + 1;
                 size_t dataEnd = xmlDocument.find('<', dataStart);
                 string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
                 if (!data.empty()) {
-                    cout << "Data inside " << tag << ": " << data << endl;
+                    if (!nodeStack.empty()) {
+                        nodeStack.top()->data = data;
+                    }
                 }
 
                 i = dataEnd;
@@ -116,16 +120,22 @@ void printTree(Tree<string>* node, int level = 0) {
     for (int i = 0; i < level; ++i) {
         cout << "  ";
     }
-    cout << node->data << endl;
 
-    //DListIterator<Tree<string>*> childIter = node->children->getIterator();
+    if (!node->data.empty()) {
+        cout << "" << node->data << endl;
+    }
+    else {
+        cout << "Empty data" << endl;
+    }
     DListIterator<Tree<string>*> childIter = node->children.getIterator();
-
     while (childIter.isValid()) {
         printTree(childIter.item(), level + 1);
         childIter.advance();
     }
 }
+
+
+
 
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
@@ -149,6 +159,7 @@ void XMLParser::parse() {
 
     cout << "Tree structure:" << endl;
     printTree(root);
+
 }
 
 int main() {
