@@ -52,61 +52,60 @@ bool XMLParser::validateXML(const string& xmlDocument) {
    // cout << tagStack.<<endl;
     return tagStack.empty();
 }
-
-// ============== Built XML Tree ===================== 
 void XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<string>*> nodeStack;
     size_t i = 0;
 
-  try {
-    while (i < xmlDocument.size()) {
-        if (xmlDocument[i] == '<') {
-            size_t start = i + 1;
-            size_t end = xmlDocument.find('>', start);
-            if (end == string::npos) {
-                return;
-            }
-
-            start = contents.find;
-                name = contents.find;
-
-                if (name = "div") {
-                else if (name = "/div") {}
-
-                else if (name = none) {} 
+    try {
+        while (i < xmlDocument.size()) {
+            if (xmlDocument[i] == '<') {
+                size_t start = i + 1;
+                size_t end = xmlDocument.find('>', start);
+                if (end == string::npos) {
+                    return;
                 }
-            string tag = xmlDocument.substr(start, end - start);
-            if (tag.empty()) {
-                return;
-            }
 
-            if (tag[0] != '/') {
-                Tree<string>* newNode = new Tree<string>(tag);
-                if (!nodeStack.empty()) {
-                    Tree<string>* parent = nodeStack.top();
-                    parent->children.append(newNode);
-                    newNode->parent = parent;
+                string tag = xmlDocument.substr(start, end - start);
+                if (tag.empty()) {
+                    return;
+                }
+
+                if (tag[0] != '/') {
+                    Tree<string>* newNode = new Tree<string>(tag);
+                    if (!nodeStack.empty()) {
+                        Tree<string>* parent = nodeStack.top();
+                        parent->children.append(newNode);
+                        newNode->parent = parent;
+                    }
+                    else {
+                        root = newNode;
+                    }
+                    nodeStack.push(newNode);
                 }
                 else {
-                    root = newNode;
+                    nodeStack.pop();
                 }
-                nodeStack.push(newNode);
+
+                // Extract data inside tags and print
+                size_t dataStart = end + 1;
+                size_t dataEnd = xmlDocument.find('<', dataStart);
+                string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
+                if (!data.empty()) {
+                    cout << "Data inside " << tag << ": " << data << endl;
+                }
+
+                i = dataEnd;
             }
             else {
-                nodeStack.pop();
+                ++i;  // === Skip non-tag characters ===
             }
-
-            i = end + 1;
-        }
-        else {
-            ++i;  // === Skip non tag characters ===
         }
     }
-  }
     catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
     }
 }
+
 
 // ===== Function to print the tree structure =====
 void printTree(Tree<string>* node, int level = 0) {
