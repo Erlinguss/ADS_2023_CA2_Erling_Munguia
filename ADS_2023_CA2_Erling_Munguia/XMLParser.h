@@ -14,12 +14,10 @@ public:
     void parse(); 
 private:
     std::string xmlFileName;
-    //Tree<std::string>* root;
     Tree<File>* root;
 
-
     bool validateXML(const string& xmlDocument);
-    void builtTree(const string& xmlDocument);
+    Tree<File*>* builtTree(const string& xmlDocument);
 
 
 };

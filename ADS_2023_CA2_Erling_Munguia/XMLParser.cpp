@@ -1,6 +1,7 @@
 #include "XMLParser.h"
 #include "Tree.h"
 #include "structure.h"
+#include "TreeIterator.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -41,118 +42,126 @@ bool XMLParser::validateXML(const string& xmlDocument) {
                 if (!hasRoot) {
                     hasRoot = true;
                 }
-                //else {
-               // cout << tag << endl;
                 tagStack.push(tag);
-               // }
+              
             }
             i = end;
         }
     }
-   // cout << tagStack.<<endl;
     return tagStack.empty();
 
 }
 
-void XMLParser::builtTree(const string& xmlDocument) {
+// =========== Display the Tree ==============
+template <class T>
+void displayTree(TreeIterator<T> iter, string indent)
+{
+    cout << indent << iter.node->data;
+    if (iter.childValid())
+    {
+        cout << "(" << endl;
+
+        while (iter.childValid())
+        {
+            TreeIterator<T> iter2(iter.childIter.currentNode->data);
+            displayTree(iter2, "\t" + indent);
+            iter.childForth();
+        }
+        cout << indent << ")";
+    }
+    cout << endl;
+}
+
+// =========== Build the Tree ==============
+Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<File>*> nodeStack;
     size_t i = 0;
-    File currentFile;
+    File *currentFile = nullptr;
+    Tree<File*>* tree =nullptr;
+    TreeIterator<File*> *iter = nullptr;
 
     try {
         Tree<File>* newNode = nullptr;
 
         while (i < xmlDocument.size()) {
+          
             if (xmlDocument[i] == '<') {
+                
                 size_t start = i + 1;
                 size_t end = xmlDocument.find('>', start);
                 if (end == string::npos) {
-                    return;
+                    return tree;
                 }
 
                 string tag = xmlDocument.substr(start, end - start);
                 if (tag.empty()) {
-                    return;
+                    return tree;
                 }
 
-                if (tag[0] != '/') {
-                    newNode = new Tree<File>({ "", "", 0 });
-                    if (!nodeStack.empty()) {
-                        Tree<File>* parent = nodeStack.top();
-                        parent->children.append(newNode);
-                        newNode->parent = parent;
+                if (tag[0] != '/') 
+                {
+                 
+                    size_t dataStart = end + 1;
+                    size_t dataEnd = xmlDocument.find('<', dataStart);
+                    string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
+                  
+                    if (tag == "file")
+                    {
+                        currentFile = new File();
+                        iter->appendChild(currentFile);
                     }
-                    else {
-                        root = newNode;
-                    }
-                    nodeStack.push(newNode);
+                    else if (tag == "dir") 
+                    {
+                        currentFile = new File();
+                                    
+                            if (iter == nullptr)
+                            {
+                                tree = new Tree<File*>(currentFile);
+                                iter = new TreeIterator<File*>(tree);
+                            }
+                            else
+                            {
+                                iter->appendChild(currentFile);
+                                iter->childEnd();
+                                iter->down();
 
-                    if (tag == "file" || tag == "div") {
-                        currentFile.type = tag;
-                    }
+                            }
+                    
+                   }
+                       
+                else if (tag == "name") {
+                    currentFile->name = data;
                 }
-                else {
-                    nodeStack.pop();
+                else if (tag == "length") {
+                    currentFile->size = stoi(data);
                 }
-
-                size_t dataStart = end + 1;
-                size_t dataEnd = xmlDocument.find('<', dataStart);
-                string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
-                if (!data.empty() && newNode != nullptr) {
-                    if (tag == "name") {
-                        newNode->data.name = data;
-                    }
-                    else if (tag == "length") {
-                        currentFile.size = stoi(data);
-                    }
-                    else if (tag == "type") {
-                        currentFile.type = data;
-                        newNode->data = currentFile;
-                    }
+                else if (tag == "type") {
+                    currentFile->type = data;
+                 
                 }
 
-                i = dataEnd;
+                    i = dataEnd;
+                    
+                }
+                else if(tag[0] == '/' && tag=="/dir") {
+                    iter->up();
+                    i = end + 1;
+                }
+                else
+                {
+                    i = end + 1;
+                } 
+              
             }
             else {
                 ++i;
             }
         }
+        return tree;
+       // displayTree(TreeIterator<File*>(tree), "");
     }
     catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
-    }
-}
-
-void printTree(Tree<File>* node, int level = 0) {
-    if (node == nullptr) {
-        return;
-    }
-
-    if (!node->data.name.empty()) {
-        for (int i = 0; i < level; ++i) {
-            cout << "  ";
-        }
-        cout << node->data.name << endl;
-    }
-
-    if (node->data.size != 0 || !node->data.type.empty()) {
-        for (int i = 0; i < level; ++i) {
-            cout << "  ";
-        }
-        cout << node->data.size << " b" << endl;
-    }
-
-    if (!node->data.type.empty()) {
-        for (int i = 0; i < level; ++i) {
-            cout << "  ";
-        }
-        cout << node->data.type << endl;
-    }
-
-    DListIterator<Tree<File>*> childIter = node->children.getIterator();
-    while (childIter.isValid()) {
-        printTree(childIter.item(), level + 1);
-        childIter.advance();
     }
 }
 
@@ -161,26 +170,29 @@ XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
 
 
+// ===== Function to parse the Tree =====
 void XMLParser::parse() {
     ifstream file(xmlFileName);
-    string xmlDocument="";
+    string xmlDocument = "";
     string line;
     while (getline(file, line))
     {
-         xmlDocument += line;
+        xmlDocument += line;
     }
 
     if (!validateXML(xmlDocument)) {
-       cout << "Invalid XML document." << endl;
-       return;
-     }
+        cout << "Invalid XML document." << endl;
+        return;
+    }
 
-    builtTree(xmlDocument);
+    Tree<File*>* tree = builtTree(xmlDocument);
 
-    cout << "Tree structure:" << endl;
-    printTree(root);
-
+    if (tree != nullptr) {
+        cout << "Tree structure:" << endl;
+        displayTree(TreeIterator<File*>(tree), ""); 
+    }
 }
+
 
 int main() {
     const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
@@ -189,6 +201,9 @@ int main() {
    
    return 0;
 }
+
+
+
 
 //int main()
 //{

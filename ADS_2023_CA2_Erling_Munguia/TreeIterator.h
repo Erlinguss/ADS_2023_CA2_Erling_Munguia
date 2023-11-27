@@ -38,7 +38,7 @@ void TreeIterator<T>::resetIterator()
 {
 	if (node != nullptr)
 	{
-		childIter = node->children->getIterator();
+		childIter = node->children.getIterator();
 	}
 	else
 	{
@@ -119,7 +119,7 @@ void TreeIterator<T>::appendChild(T item)
 {
 	Tree<T>* temp = new Tree<T>(item);
 	temp->parent = node;
-	node->children->append(temp);
+	node->children.append(temp);
 	resetIterator();
 }
 
