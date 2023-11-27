@@ -23,7 +23,7 @@ T Tree<T>::getData() const
 }
 
 template <class T>
-Tree<T>::Tree(T item) : data(item), parent(nullptr)
+Tree<T>::Tree( T item) : data(item), parent(nullptr)
 {
     
 

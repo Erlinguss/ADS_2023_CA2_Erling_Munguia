@@ -4,6 +4,7 @@
 #include <sstream>
 #include <stack>
 #include "Tree.h"
+#include "structure.h"
 using namespace std;
 
 class XMLParser
@@ -13,7 +14,8 @@ public:
     void parse(); 
 private:
     std::string xmlFileName;
-    Tree<std::string>* root;
+    //Tree<std::string>* root;
+    Tree<File>* root;
 
 
     bool validateXML(const string& xmlDocument);

@@ -51,14 +51,17 @@ bool XMLParser::validateXML(const string& xmlDocument) {
     }
    // cout << tagStack.<<endl;
     return tagStack.empty();
+
 }
 
-
 void XMLParser::builtTree(const string& xmlDocument) {
-    stack<Tree<string>*> nodeStack;
+    stack<Tree<File>*> nodeStack;
     size_t i = 0;
+    File currentFile;
 
     try {
+        Tree<File>* newNode = nullptr;
+
         while (i < xmlDocument.size()) {
             if (xmlDocument[i] == '<') {
                 size_t start = i + 1;
@@ -73,9 +76,9 @@ void XMLParser::builtTree(const string& xmlDocument) {
                 }
 
                 if (tag[0] != '/') {
-                    Tree<string>* newNode = new Tree<string>(tag);
+                    newNode = new Tree<File>({ "", "", 0 });
                     if (!nodeStack.empty()) {
-                        Tree<string>* parent = nodeStack.top();
+                        Tree<File>* parent = nodeStack.top();
                         parent->children.append(newNode);
                         newNode->parent = parent;
                     }
@@ -83,25 +86,35 @@ void XMLParser::builtTree(const string& xmlDocument) {
                         root = newNode;
                     }
                     nodeStack.push(newNode);
+
+                    if (tag == "file" || tag == "div") {
+                        currentFile.type = tag;
+                    }
                 }
                 else {
                     nodeStack.pop();
                 }
 
-                // === Extract data inside tags and append to the corresponding node ===
                 size_t dataStart = end + 1;
                 size_t dataEnd = xmlDocument.find('<', dataStart);
                 string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
-                if (!data.empty()) {
-                    if (!nodeStack.empty()) {
-                        nodeStack.top()->data = data;
+                if (!data.empty() && newNode != nullptr) {
+                    if (tag == "name") {
+                        newNode->data.name = data;
+                    }
+                    else if (tag == "length") {
+                        currentFile.size = stoi(data);
+                    }
+                    else if (tag == "type") {
+                        currentFile.type = data;
+                        newNode->data = currentFile;
                     }
                 }
 
                 i = dataEnd;
             }
             else {
-                ++i;  // === Skip non-tag characters ===
+                ++i;
             }
         }
     }
@@ -110,31 +123,38 @@ void XMLParser::builtTree(const string& xmlDocument) {
     }
 }
 
-
-// ===== Function to print the tree structure =====
-void printTree(Tree<string>* node, int level = 0) {
+void printTree(Tree<File>* node, int level = 0) {
     if (node == nullptr) {
         return;
     }
 
-    for (int i = 0; i < level; ++i) {
-        cout << "  ";
+    if (!node->data.name.empty()) {
+        for (int i = 0; i < level; ++i) {
+            cout << "  ";
+        }
+        cout << node->data.name << endl;
     }
 
-    if (!node->data.empty()) {
-        cout << "" << node->data << endl;
+    if (node->data.size != 0 || !node->data.type.empty()) {
+        for (int i = 0; i < level; ++i) {
+            cout << "  ";
+        }
+        cout << node->data.size << " b" << endl;
     }
-    else {
-        cout << "Empty data" << endl;
+
+    if (!node->data.type.empty()) {
+        for (int i = 0; i < level; ++i) {
+            cout << "  ";
+        }
+        cout << node->data.type << endl;
     }
-    DListIterator<Tree<string>*> childIter = node->children.getIterator();
+
+    DListIterator<Tree<File>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
         printTree(childIter.item(), level + 1);
         childIter.advance();
     }
 }
-
-
 
 
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
@@ -166,7 +186,6 @@ int main() {
     const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
-
    
    return 0;
 }

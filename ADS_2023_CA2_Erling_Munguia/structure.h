@@ -3,10 +3,11 @@
 #include <iostream>
 using namespace std;
 
-struct file {
+struct File {
 
 	string name;
 	string type;
 	int size;
+	
 
 };
