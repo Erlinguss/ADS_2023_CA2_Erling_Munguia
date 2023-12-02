@@ -10,11 +10,10 @@ public:
     DList<Tree<T>*> children;
 
     Tree(T item);
-
     int count() const;
     T getData() const;
-    Tree<T>* getRoot();
-    //int calculateMemoryUsage() const;
+    Tree<T>* getRoot(); 
+
 };
 
 template <class T>
@@ -28,20 +27,6 @@ Tree<T>::Tree( T item) : data(item), parent(nullptr)
 {
 }
 
-// ===  Task 2a: Determine the number of items within a given folder directory ===
-template <class T>
-int Tree<T>::count() const
-{
-    int totalCount = 1; // === Start with the current node ===
-    DListIterator<Tree<T>*> childIter = children.getIterator();
-    while (childIter.isValid())
-    {
-        totalCount += childIter.item()->count();
-        childIter.advance();
-    }
-    return totalCount;
-}
-
 template <class T>
 Tree<T>* Tree<T>::getRoot()
 {
@@ -51,4 +36,18 @@ Tree<T>* Tree<T>::getRoot()
         currentNode = currentNode->parent;
     }
     return currentNode;
+}
+
+// ===  Task 2a: Determine the number of items within a given folder directory ===
+template <class T>
+int Tree<T>::count() const
+{
+    int totalCount = 1; 
+    DListIterator<Tree<T>*> childIter = children.getIterator();
+    while (childIter.isValid())
+    {
+        totalCount += childIter.item()->count();
+        childIter.advance();
+    }
+    return totalCount;
 }

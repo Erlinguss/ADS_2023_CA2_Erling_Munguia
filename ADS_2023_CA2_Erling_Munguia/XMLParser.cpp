@@ -2,10 +2,10 @@
 #include "Tree.h"
 #include "structure.h"
 #include "TreeIterator.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <queue>
 using namespace std;
 
 #include <SFML/Graphics.hpp>
@@ -44,7 +44,6 @@ bool XMLParser::validateXML(const string& xmlDocument) {
                     hasRoot = true;
                 }
                 tagStack.push(tag);
-              
             }
             i = end;
         }
@@ -184,48 +183,89 @@ void XMLParser::parse() {
     Tree<File*>* tree = builtTree(xmlDocument);
 
     if (tree != nullptr) {
-        cout << "Tree structure:" << endl;
+       // root = tree;
+        cout << "\nTree structure:" << endl;
         displayTree(TreeIterator<File*>(tree), ""); 
     }
 }
 
 
 
-int main() {
-    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
-    XMLParser xmlParser(xmlFileName); 
-    xmlParser.parse(); 
+int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
+    if (folder == nullptr) {
+        return 0;
+    }
 
+    int totalMemory = 0;
+    queue<Tree<File>*> q;
+    q.push(folder);
+
+    while (!q.empty()) {
+        Tree<File>* current = q.front();
+        q.pop();
+
+        totalMemory += current->getData().size;
+
+        DListIterator<Tree<File>*> childIter = current->children.getIterator();
+        while (childIter.isValid()) {
+            q.push(childIter.item());
+            childIter.advance();
+        }
+    }
+
+    return totalMemory;
+}
+
+
+
+
+int main() {
     int choice;
+    string xmlFileName;
+    XMLParser xmlParser("");  
 
     do {
-        cout << "Select an option:\n";
-        cout << "1. Determine the number of items within a given folder directory.\n";
-        cout << "2. Determine the amount of memory used by a given folder.\n";
-        cout << "3. Prune the tree to remove empty folders.\n";
-        cout << "4. Find a given file/folder.\n";
-        cout << "5. Display the contents of a given folder.\n";
-        cout << "0. Exit.\n";
+        cout << "\nSelect an option:\n";
+        cout << "1. Validate XML, built the tree and Displayed .\n";
+        cout << "2. Determine the number of items within a given folder directory.\n";
+        cout << "3. Determine the amount of memory used by a given folder.\n";
+        cout << "4. Prune the tree to remove empty folders.\n";
+        cout << "5. Find a given file/folder.\n";
+        cout << "6. Display the contents of a given folder.\n";
+        cout << "7. Exit.\n";
 
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
         case 1:
-            // Call the countItems function
-          //  cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+        
+            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            xmlParser = XMLParser(xmlFileName); 
+            xmlParser.parse();
             break;
+        
         case 2:
-             break;
+        
+            cout << "here" << endl;
+           // cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+            break;
+        
         case 3:
-           
+            if (xmlParser.getRoot() != nullptr) {
+                cout << "Memory used by the folder: " << calculateMemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+            }
+            else {
+                cout << "Root folder not found.\n";
+            }
             break;
-        case 4: {
-           
+
+        case 4: 
             break;
-        }
+        
         case 5:
-           
+            break;
+        case 6:
             break;
         case 0:
             cout << "Exiting the program.\n";
@@ -235,7 +275,7 @@ int main() {
         }
     } while (choice != 0);
 
-   return 0;
+    return 0;
 }
 
 
