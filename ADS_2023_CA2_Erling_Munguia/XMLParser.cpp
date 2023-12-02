@@ -213,7 +213,7 @@ int main() {
         switch (choice) {
         case 1:
             // Call the countItems function
-            cout << "Number of items: " << xmlParser.getRoot()->countItems() << endl;
+          //  cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
             break;
         case 2:
              break;
@@ -239,27 +239,5 @@ int main() {
 }
 
 
-//int main()
-//{
-//    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-//    sf::CircleShape shape(100.f);
-//    shape.setFillColor(sf::Color::Green);
-
- //   while (window.isOpen())
- //   {
-  //      sf::Event event;
- //       while (window.pollEvent(event))
- //       {
-//            if (event.type == sf::Event::Closed)
- //               window.close();
- //       }
-
-  //      window.clear();
-  //      window.draw(shape);
-   //     window.display();
-  //  }
-
-  //  return 0;
-//}
 
 
