@@ -38,7 +38,7 @@ Tree<T>* Tree<T>::getRoot()
     return currentNode;
 }
 
-// ===  Number of items within a given folder directory ===
+// === task 2a ===
 template <class T>
 int Tree<T>::count() const
 {
@@ -51,3 +51,5 @@ int Tree<T>::count() const
     }
     return totalCount;
 }
+
+

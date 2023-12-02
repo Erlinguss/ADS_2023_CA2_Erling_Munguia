@@ -74,21 +74,21 @@ void displayTree(TreeIterator<T> iter, string indent)
     cout << endl;
 }
 
-// =========== Build the Tree ==============
+// ================= Build the Tree ======================
 Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     stack<Tree<File>*> nodeStack;
     size_t i = 0;
-    File *currentFile = nullptr;
-    Tree<File*>* tree =nullptr;
-    TreeIterator<File*> *iter = nullptr;
+    File* currentFile = nullptr;
+    Tree<File*>* tree = nullptr;
+    TreeIterator<File*>* iter = nullptr;
 
     try {
-        Tree<File>* newNode = nullptr;
+        //Tree<File>* newNode = nullptr;
 
         while (i < xmlDocument.size()) {
-          
+
             if (xmlDocument[i] == '<') {
-                
+
                 size_t start = i + 1;
                 size_t end = xmlDocument.find('>', start);
                 if (end == string::npos) {
@@ -100,56 +100,56 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                     return tree;
                 }
 
-                if (tag[0] != '/') 
+                if (tag[0] != '/')
                 {
                     size_t dataStart = end + 1;
                     size_t dataEnd = xmlDocument.find('<', dataStart);
                     string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
-                  
+
                     if (tag == "file")
                     {
                         currentFile = new File();
                         iter->appendChild(currentFile);
                     }
-                    else if (tag == "dir") 
+                    else if (tag == "dir")
                     {
                         currentFile = new File();
-                                    
-                            if (iter == nullptr)
-                            {
-                                tree = new Tree<File*>(currentFile);
-                                iter = new TreeIterator<File*>(tree);
-                            }
-                            else
-                            {
-                                iter->appendChild(currentFile);
-                                iter->childEnd();
-                                iter->down();
-                            }
-                    
-                   }
-                       
-                else if (tag == "name") {
-                    currentFile->name = data;
+
+                        if (iter == nullptr)
+                        {
+                            tree = new Tree<File*>(currentFile);
+                            iter = new TreeIterator<File*>(tree);
+                        }
+                        else
+                        {
+                            iter->appendChild(currentFile);
+                            iter->childEnd();
+                            iter->down();
+                        }
+
+                    }
+
+                    else if (tag == "name") {
+                        currentFile->name = data;
+                    }
+                    else if (tag == "length") {
+                        currentFile->size = stoi(data);
+                    }
+                    else if (tag == "type") {
+                        currentFile->type = data;
+
+                    }
+                    i = dataEnd;
                 }
-                else if (tag == "length") {
-                    currentFile->size = stoi(data);
-                }
-                else if (tag == "type") {
-                    currentFile->type = data;
-                 
-                }
-                    i = dataEnd;    
-                }
-                else if(tag[0] == '/' && tag=="/dir") {
+                else if (tag[0] == '/' && tag == "/dir") {
                     iter->up();
                     i = end + 1;
                 }
                 else
                 {
                     i = end + 1;
-                } 
-              
+                }
+
             }
             else {
                 ++i;
@@ -167,7 +167,8 @@ XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
 
 
-// ===== Function to parse the Tree =====
+
+// ======= Function to parse the Tree ========
 void XMLParser::parse() {
     ifstream file(xmlFileName);
     string xmlDocument = "";
@@ -192,6 +193,7 @@ void XMLParser::parse() {
 }
 
 
+// ======= Task 2b. Function to calculate the the memory usage BFS ========
 int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
     if (folder == nullptr) {
         return 0;
@@ -205,17 +207,40 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
         Tree<File>* current = q.front();
         q.pop();
 
-        totalMemory += current->getData().size;
-
+         totalMemory += current->getData().size;
+        
         DListIterator<Tree<File>*> childIter = current->children.getIterator();
         while (childIter.isValid()) {
             q.push(childIter.item());
             childIter.advance();
         }
+        
     }
 
     return totalMemory;
 }
+
+
+
+// === Task 2d. Find a given folder using depth-first search ===
+Tree<string>* findItem(const string& itemName, Tree<string>* currentNode) {
+    if (currentNode->data == itemName) {
+        return currentNode;
+    }
+
+    DListIterator<Tree<string>*> childIter = currentNode->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<string>* foundNode = findItem(itemName, childIter.item());
+        if (foundNode != nullptr) {
+            return foundNode;
+        }
+        childIter.advance();
+    }
+
+    return nullptr;
+}
+
+
 
 
 
@@ -225,19 +250,19 @@ int main() {
     XMLParser xmlParser("");  
 
     do {
-        cout << "===================================================== \n";
+        cout << "=====================================================\n";
         cout << "|                Select an option:                  |\n";
-        cout << "===================================================== \n";
+        cout << "=====================================================\n";
         cout << "| 1. Validate XML, built the tree and Displayed     |\n";
         cout << "| 2. Number of items within a given folder directory|\n";
         cout << "| 3. Memory used by a given folder.                 |\n";
         cout << "| 4. Prune the tree to remove empty folders         |\n";
         cout << "| 5. Find a given file/folder                       |\n";
         cout << "| 6. Display the contents of a given folder         |\n";
-        cout << "| 0. Exit.                                          |\n";
-        cout << "===================================================== \n";
+        cout << "| 7. Exit.                                          |\n";
+        cout << "=====================================================\n";
         cout << "| Enter your choice:                                |\n";
-        cout << "===================================================== \n";
+        cout << "=====================================================\n";
 
         cin >> choice;
 
@@ -251,12 +276,12 @@ int main() {
         
         case 2:
 
-            //cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+            cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
             break;
         
         case 3:
             if (xmlParser.getRoot() != nullptr) {
-               // cout << "Memory used by the folder: " << xmlParser.calculateMemoryUsageBFS() << " bytes\n";
+               cout << "Memory used by the folder: " << xmlParser.calculateMemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";
@@ -274,13 +299,13 @@ int main() {
         case 6:
 
             break;
-        case 0:
+        case 7:
             cout << "Exiting the program.\n";
             break;
         default:
             cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 0);
+    } while (choice != 7);
 
     return 0;
 }

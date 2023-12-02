@@ -20,10 +20,9 @@ public:
     void setRoot(Tree<File>* newRoot) {
         root = newRoot;
     }
-    //=============================
    
     int calculateMemoryUsageBFS(Tree<File>* folder) const;
-
+    //===============================
 
 private:
     std::string xmlFileName;
