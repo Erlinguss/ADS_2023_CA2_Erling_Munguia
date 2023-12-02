@@ -1,11 +1,13 @@
-#include "XMLParser.h"
-#include "Tree.h"
-#include "structure.h"
-#include "TreeIterator.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <queue>
+#include "DList.h"
+#include "Tree.h"
+#include "structure.h"
+#include "TreeIterator.h"
+#include "XMLParser.h"
 using namespace std;
 
 #include <SFML/Graphics.hpp>
@@ -183,12 +185,11 @@ void XMLParser::parse() {
     Tree<File*>* tree = builtTree(xmlDocument);
 
     if (tree != nullptr) {
-       // root = tree;
+        //setRoot(tree);
         cout << "\nTree structure:" << endl;
         displayTree(TreeIterator<File*>(tree), ""); 
     }
 }
-
 
 
 int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
@@ -218,23 +219,26 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
 
 
 
-
 int main() {
     int choice;
     string xmlFileName;
     XMLParser xmlParser("");  
 
     do {
-        cout << "\nSelect an option:\n";
-        cout << "1. Validate XML, built the tree and Displayed .\n";
-        cout << "2. Determine the number of items within a given folder directory.\n";
-        cout << "3. Determine the amount of memory used by a given folder.\n";
-        cout << "4. Prune the tree to remove empty folders.\n";
-        cout << "5. Find a given file/folder.\n";
-        cout << "6. Display the contents of a given folder.\n";
-        cout << "7. Exit.\n";
+        cout << "===================================================== \n";
+        cout << "|                Select an option:                  |\n";
+        cout << "===================================================== \n";
+        cout << "| 1. Validate XML, built the tree and Displayed     |\n";
+        cout << "| 2. Number of items within a given folder directory|\n";
+        cout << "| 3. Memory used by a given folder.                 |\n";
+        cout << "| 4. Prune the tree to remove empty folders         |\n";
+        cout << "| 5. Find a given file/folder                       |\n";
+        cout << "| 6. Display the contents of a given folder         |\n";
+        cout << "| 0. Exit.                                          |\n";
+        cout << "===================================================== \n";
+        cout << "| Enter your choice:                                |\n";
+        cout << "===================================================== \n";
 
-        cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
@@ -246,26 +250,29 @@ int main() {
             break;
         
         case 2:
-        
-            cout << "here" << endl;
-           // cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+
+            //cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
             break;
         
         case 3:
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Memory used by the folder: " << calculateMemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+               // cout << "Memory used by the folder: " << xmlParser.calculateMemoryUsageBFS() << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";
             }
             break;
 
+
         case 4: 
+            
             break;
         
         case 5:
+
             break;
         case 6:
+
             break;
         case 0:
             cout << "Exiting the program.\n";

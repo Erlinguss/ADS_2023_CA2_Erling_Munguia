@@ -12,20 +12,25 @@ class XMLParser
 public:
     XMLParser(const string& xmlFileName); 
     void parse(); 
+
+    //=============================
+    Tree<File>* getRoot() const {
+        return root;
+    }
+    void setRoot(Tree<File>* newRoot) {
+        root = newRoot;
+    }
+    //=============================
    
+    int calculateMemoryUsageBFS(Tree<File>* folder) const;
+
 
 private:
     std::string xmlFileName;
     Tree<File>* root;
-
-
     bool validateXML(const string& xmlDocument);
     Tree<File*>* builtTree(const string& xmlDocument);
  
-
-    int calculateMemoryUsageBFS(Tree<File>* folder) const;
-     //================
-    //void displayFolderContents(Tree<string>* currentNode);
 
 };
 
