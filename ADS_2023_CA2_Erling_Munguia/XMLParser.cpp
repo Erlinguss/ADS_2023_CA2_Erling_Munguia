@@ -2,6 +2,7 @@
 #include "Tree.h"
 #include "structure.h"
 #include "TreeIterator.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -100,7 +101,6 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
 
                 if (tag[0] != '/') 
                 {
-                 
                     size_t dataStart = end + 1;
                     size_t dataEnd = xmlDocument.find('<', dataStart);
                     string data = xmlDocument.substr(dataStart, dataEnd - dataStart);
@@ -124,7 +124,6 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                                 iter->appendChild(currentFile);
                                 iter->childEnd();
                                 iter->down();
-
                             }
                     
                    }
@@ -139,9 +138,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                     currentFile->type = data;
                  
                 }
-
-                    i = dataEnd;
-                    
+                    i = dataEnd;    
                 }
                 else if(tag[0] == '/' && tag=="/dir") {
                     iter->up();
@@ -158,7 +155,6 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
             }
         }
         return tree;
-       // displayTree(TreeIterator<File*>(tree), "");
     }
     catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
@@ -194,15 +190,15 @@ void XMLParser::parse() {
 }
 
 
+
 int main() {
-    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example.xml";
+    const std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
-   
+
+
    return 0;
 }
-
-
 
 
 //int main()
@@ -227,3 +223,5 @@ int main() {
 
   //  return 0;
 //}
+
+

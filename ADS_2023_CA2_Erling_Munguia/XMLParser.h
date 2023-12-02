@@ -18,7 +18,10 @@ private:
 
     bool validateXML(const string& xmlDocument);
     Tree<File*>* builtTree(const string& xmlDocument);
-
+ 
+    
+    //================
+    //void displayFolderContents(Tree<string>* currentNode);
 
 };
 
