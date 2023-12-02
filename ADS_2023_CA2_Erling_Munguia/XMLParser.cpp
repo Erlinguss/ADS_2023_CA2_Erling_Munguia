@@ -221,10 +221,10 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
 }
 
 // ===Task 2c: Prune the tree to remove empty folders ===
-void pruneEmptyFolders(Tree<string>* node) {
-    DListIterator<Tree<string>*> childIter = node->children.getIterator();
+void pruneEmptyFolders(Tree<File>* node) {
+    DListIterator<Tree<File>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
-        Tree<string>* childNode = childIter.item();
+        Tree<File>* childNode = childIter.item();
         pruneEmptyFolders(childNode);
 
         if (childNode->children.isEmpty()) {
@@ -241,14 +241,14 @@ void pruneEmptyFolders(Tree<string>* node) {
 
 
 // === Task 2d: Find a given folder using depth-first search ===
-Tree<string>* findItem(const string& itemName, Tree<string>* currentNode) {
+Tree<File>* findItem(const string& itemName, Tree<File>* currentNode) {
     if (currentNode->data == itemName) {
         return currentNode;
     }
 
-    DListIterator<Tree<string>*> childIter = currentNode->children.getIterator();
+    DListIterator<Tree<File>*> childIter = currentNode->children.getIterator();
     while (childIter.isValid()) {
-        Tree<string>* foundNode = findItem(itemName, childIter.item());
+        Tree<File>* foundNode = findItem(itemName, childIter.item());
         if (foundNode != nullptr) {
             return foundNode;
         }
@@ -259,6 +259,18 @@ Tree<string>* findItem(const string& itemName, Tree<string>* currentNode) {
 }
 
 
+// === Task 2e: Display the contents of a given folder ===
+void displayFolderContents(Tree<File>* currentNode) {
+    cout << "Folder: " << currentNode->data << endl;
+
+    DListIterator<Tree<File>*> childIter = currentNode->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File>* childNode = childIter.item();
+        cout << "  Folder: " << childNode->data << " Size: " << childNode->calculateMemoryUsageBFS() << " bytes" << endl;
+        displayFolderContents(childNode);
+        childIter.advance();
+    }
+}
 
 
 
