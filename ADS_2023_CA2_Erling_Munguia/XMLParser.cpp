@@ -196,6 +196,44 @@ int main() {
     XMLParser xmlParser(xmlFileName); 
     xmlParser.parse(); 
 
+    int choice;
+
+    do {
+        cout << "Select an option:\n";
+        cout << "1. Determine the number of items within a given folder directory.\n";
+        cout << "2. Determine the amount of memory used by a given folder.\n";
+        cout << "3. Prune the tree to remove empty folders.\n";
+        cout << "4. Find a given file/folder.\n";
+        cout << "5. Display the contents of a given folder.\n";
+        cout << "0. Exit.\n";
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            // Call the countItems function
+            cout << "Number of items: " << xmlParser.getRoot()->countItems() << endl;
+            break;
+        case 2:
+             break;
+        case 3:
+           
+            break;
+        case 4: {
+           
+            break;
+        }
+        case 5:
+           
+            break;
+        case 0:
+            cout << "Exiting the program.\n";
+            break;
+        default:
+            cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 0);
 
    return 0;
 }
