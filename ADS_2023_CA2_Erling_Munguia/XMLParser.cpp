@@ -220,9 +220,27 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
     return totalMemory;
 }
 
+// ===Task 2c: Prune the tree to remove empty folders ===
+void pruneEmptyFolders(Tree<string>* node) {
+    DListIterator<Tree<string>*> childIter = node->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<string>* childNode = childIter.item();
+        pruneEmptyFolders(childNode);
+
+        if (childNode->children.isEmpty()) {
+            // Remove the empty folder
+            node->children.remove(childIter);
+            delete childNode;
+        }
+        else {
+            childIter.advance();
+        }
+    }
+}
 
 
-// === Task 2d. Find a given folder using depth-first search ===
+
+// === Task 2d: Find a given folder using depth-first search ===
 Tree<string>* findItem(const string& itemName, Tree<string>* currentNode) {
     if (currentNode->data == itemName) {
         return currentNode;
