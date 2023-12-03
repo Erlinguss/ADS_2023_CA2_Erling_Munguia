@@ -24,7 +24,9 @@ public:
 template <class T>
 DListNode<T>::DListNode(DListNode<T> &node)
 {
-	this->data = new DListNode(node->data);
+	//this->data = new DListNode(node->data);
+	this->data = T(node.data);
+
 }
 template <class T>
 DListNode<T>::DListNode(T item)

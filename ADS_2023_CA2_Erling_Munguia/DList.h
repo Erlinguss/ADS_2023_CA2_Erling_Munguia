@@ -132,10 +132,12 @@ void DList<T>::removeTail()
 	}
 }
 template <class T>
-DListIterator<T> DList<T>::getIterator()
+DListIterator<T> DList<T>::getIterator()  
 {
 	return DListIterator<T>(this, head);
+
 }
+
 template <class T>
 void DList<T>::insert(DListIterator<T> &iter, T item)
 {

@@ -17,14 +17,13 @@ public:
     Tree<File>* getRoot() const {
         return root;
     }
-    void setRoot(Tree<File>* newRoot) {
-        root = newRoot;
-    }
-   
+    
+    void setRoot(Tree<File>* newRoot);
     int calculateMemoryUsageBFS(Tree<File>* folder) const;
     //===============================
 
 private:
+   
     std::string xmlFileName;
     Tree<File>* root;
     bool validateXML(const string& xmlDocument);

@@ -11,9 +11,10 @@ public:
 
 
     Tree(T item);
-    int count() const;
+    int count();
     T getData() const;
     Tree<T>* getRoot(); 
+
 
 };
 
@@ -39,9 +40,11 @@ Tree<T>* Tree<T>::getRoot()
     return currentNode;
 }
 
+
+
 // === task 2a ===
 template <class T>
-int Tree<T>::count() const
+int Tree<T>::count() 
 {
     int totalCount = 1; 
     DListIterator<Tree<T>*> childIter = children.getIterator();
@@ -52,6 +55,7 @@ int Tree<T>::count() const
     }
     return totalCount;
 }
+
 
 
 
