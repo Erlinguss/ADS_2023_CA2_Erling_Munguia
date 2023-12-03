@@ -9,6 +9,7 @@ public:
     Tree<T>* parent;
     DList<Tree<T>*> children;
 
+
     Tree(T item);
     int count() const;
     T getData() const;

@@ -29,7 +29,5 @@ private:
     Tree<File>* root;
     bool validateXML(const string& xmlDocument);
     Tree<File*>* builtTree(const string& xmlDocument);
- 
-
 };
 

@@ -125,6 +125,8 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                             iter->appendChild(currentFile);
                             iter->childEnd();
                             iter->down();
+                            
+                           
                         }
 
                     }
@@ -186,7 +188,7 @@ void XMLParser::parse() {
     Tree<File*>* tree = builtTree(xmlDocument);
 
     if (tree != nullptr) {
-        //setRoot(tree);
+       // setRoot(tree);
         cout << "\nTree structure:" << endl;
         displayTree(TreeIterator<File*>(tree), ""); 
     }
@@ -221,7 +223,7 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
 }
 
 // ===Task 2c: Prune the tree to remove empty folders ===
-void pruneEmptyFolders(Tree<File>* node) {
+/*void pruneEmptyFolders(Tree<File>* node) {
     DListIterator<Tree<File>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
         Tree<File>* childNode = childIter.item();
@@ -236,12 +238,12 @@ void pruneEmptyFolders(Tree<File>* node) {
             childIter.advance();
         }
     }
-}
+}*/
 
 
 
 // === Task 2d: Find a given folder using depth-first search ===
-Tree<File>* findItem(const string& itemName, Tree<File>* currentNode) {
+/*Tree<File>* findItem(const string& itemName, Tree<File>* currentNode) {
     if (currentNode->data == itemName) {
         return currentNode;
     }
@@ -256,11 +258,11 @@ Tree<File>* findItem(const string& itemName, Tree<File>* currentNode) {
     }
 
     return nullptr;
-}
+}*/
 
 
 // === Task 2e: Display the contents of a given folder ===
-void displayFolderContents(Tree<File>* currentNode) {
+/*void displayFolderContents(Tree<File>* currentNode) {
     cout << "Folder: " << currentNode->data << endl;
 
     DListIterator<Tree<File>*> childIter = currentNode->children.getIterator();
@@ -270,8 +272,7 @@ void displayFolderContents(Tree<File>* currentNode) {
         displayFolderContents(childNode);
         childIter.advance();
     }
-}
-
+}*/
 
 
 int main() {
@@ -305,8 +306,13 @@ int main() {
             break;
         
         case 2:
+            if (xmlParser.getRoot() != nullptr) {
+                cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+            }
+            else {
+                cout << "Root folder not found.\n";
+            } 
 
-            cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
             break;
         
         case 3:
@@ -316,6 +322,7 @@ int main() {
             else {
                 cout << "Root folder not found.\n";
             }
+
             break;
 
 
