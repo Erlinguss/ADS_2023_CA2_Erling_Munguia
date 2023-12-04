@@ -55,7 +55,7 @@ bool XMLParser::validateXML(const string& xmlDocument) {
 }
 
 
-void XMLParser::setRoot(Tree<File>* newRoot) {
+void XMLParser::setRoot(Tree<File*>* newRoot) {
     root = newRoot;
 }
 
@@ -83,7 +83,7 @@ void displayTree(TreeIterator<T> iter, string indent)
 
 // ============== Build the Tree ================
 Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
-    stack<Tree<File>*> nodeStack;
+    //stack<Tree<File>*> nodeStack;
     size_t i = 0;
     File* currentFile = nullptr;
     Tree<File*>* tree = nullptr;
@@ -183,7 +183,7 @@ void XMLParser::parse() {
     Tree<File*>* tree = builtTree(xmlDocument);
 
     if (tree != nullptr) {
-        //setRoot(tree);
+        setRoot(tree);
         cout << "\nTree structure:" << endl;
         displayTree(TreeIterator<File*>(tree), ""); 
     }
@@ -192,20 +192,21 @@ void XMLParser::parse() {
 
 
 // ======= Task 2b. Function to calculate the memory usage BFS ========
+
 int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
     if (folder == nullptr) {
         return 0;
     }
 
     int totalMemory = 0;
-    queue<Tree<File>*> q;
+    queue<Tree<File> *> q;
     q.push(folder);
 
     while (!q.empty()) {
-        Tree<File>* current = q.front();
+        Tree<File> * current = q.front();
         q.pop();
 
-         totalMemory += current->getData().size;
+         totalMemory += current->getData()->size;
         
         DListIterator<Tree<File>*> childIter = current->children.getIterator();
         while (childIter.isValid()) {
@@ -215,7 +216,6 @@ int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
     }
     return totalMemory;
 }
-
 
 
 int main() {
@@ -259,12 +259,13 @@ int main() {
             break;
         
         case 3:
-            if (xmlParser.getRoot() != nullptr) {
+             if (xmlParser.getRoot() != nullptr) {
                cout << "Memory used by the folder: " << xmlParser.calculateMemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";
             }
+           
 
             break;
 
@@ -276,12 +277,15 @@ int main() {
         case 5:
 
             break;
+
         case 6:
 
             break;
+
         case 7:
             cout << "Exiting the program.\n";
             break;
+
         default:
             cout << "Invalid choice. Try again.\n";
         }

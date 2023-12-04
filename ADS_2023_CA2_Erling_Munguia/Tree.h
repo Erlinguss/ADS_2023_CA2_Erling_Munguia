@@ -15,7 +15,6 @@ public:
     T getData() const;
     Tree<T>* getRoot(); 
 
-
 };
 
 template <class T>
@@ -39,7 +38,6 @@ Tree<T>* Tree<T>::getRoot()
     }
     return currentNode;
 }
-
 
 
 // === task 2a ===
