@@ -19,7 +19,7 @@ public:
     }
     
     void setRoot(Tree<File*>* newRoot);
-    int calculateMemoryUsageBFS(Tree<File>* folder) const;
+    int MemoryUsageBFS(Tree<File*>* folder) const;
     
 
 private:

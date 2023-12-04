@@ -14,7 +14,7 @@ using namespace std;
 #include "SFML/Graphics.hpp"
 
 
-// ========= Implementation of XMLParser Validation ============
+//======= Implementation of XMLParser Validation ========
 bool XMLParser::validateXML(const string& xmlDocument) {
     stack<string> tagStack;
     bool hasRoot = false;
@@ -55,12 +55,7 @@ bool XMLParser::validateXML(const string& xmlDocument) {
 }
 
 
-void XMLParser::setRoot(Tree<File*>* newRoot) {
-    root = newRoot;
-}
-
-
-// ============= Display the Tree ================
+// ========= Method Display the Tree =============
 template <class T>
 void displayTree(TreeIterator<T> iter, string indent)
 {
@@ -81,7 +76,7 @@ void displayTree(TreeIterator<T> iter, string indent)
 }
 
 
-// ============== Build the Tree ================
+// ================ Build the Tree ===============
 Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     //stack<Tree<File>*> nodeStack;
     size_t i = 0;
@@ -158,7 +153,10 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     }
 }
 
-
+// ========== Method set the Root ================
+void XMLParser::setRoot(Tree<File*>* newRoot) {
+    root = newRoot;
+}
 
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
@@ -191,24 +189,23 @@ void XMLParser::parse() {
 }
 
 
-// ======= Task 2b. Function to calculate the memory usage BFS ========
-
-int XMLParser::calculateMemoryUsageBFS(Tree<File>* folder) const {
+// ===== Task 2b. Function to calculate the memory usage BFS =====
+int XMLParser::MemoryUsageBFS(Tree<File*>* folder) const {
     if (folder == nullptr) {
         return 0;
     }
 
     int totalMemory = 0;
-    queue<Tree<File> *> q;
+    queue<Tree<File*> *> q;
     q.push(folder);
 
     while (!q.empty()) {
-        Tree<File> * current = q.front();
+        Tree<File*> * current = q.front();
         q.pop();
 
          totalMemory += current->getData()->size;
         
-        DListIterator<Tree<File>*> childIter = current->children.getIterator();
+        DListIterator<Tree<File*>*> childIter = current->children.getIterator();
         while (childIter.isValid()) {
             q.push(childIter.item());
             childIter.advance();
@@ -224,6 +221,7 @@ int main() {
     XMLParser xmlParser("");  
 
     do {
+        cout << "\n";
         cout << "=====================================================\n";
         cout << "|                Select an option:                  |\n";
         cout << "=====================================================\n";
@@ -260,7 +258,7 @@ int main() {
         
         case 3:
              if (xmlParser.getRoot() != nullptr) {
-               cout << "Memory used by the folder: " << xmlParser.calculateMemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+               cout << "Memory used by the folder: " << xmlParser.MemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";

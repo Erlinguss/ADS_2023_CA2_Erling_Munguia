@@ -39,7 +39,6 @@ Tree<T>* Tree<T>::getRoot()
     return currentNode;
 }
 
-
 // === task 2a ===
 template <class T>
 int Tree<T>::count() 
