@@ -222,7 +222,7 @@ void pruneEmptyFolders(Tree<File*>* node) {
         Tree<File*>* childNode = childIter.item();
         pruneEmptyFolders(childNode);
 
-        if (childNode->children.isEmpty()) {
+        if (childNode->children.size() == 0) {
             // === Remove the empty folder ===
             node->children.remove(childIter);
             delete childNode;
@@ -232,10 +232,6 @@ void pruneEmptyFolders(Tree<File*>* node) {
         }
     }
 }
-
-
-
-
 
 
 int main() {
