@@ -239,7 +239,11 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
     if (currentName.find(partialName) != string::npos) {
         cout << "Path: " << newPath << endl;
-        return currentNode;
+        
+       // if (currentNode->getData()->type == "dir") {
+            return currentNode;
+       // }
+       
     }
 
     DListIterator<Tree<File*>*> childIter = currentNode->children.getIterator();
@@ -255,9 +259,10 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 }
 
 
+
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
-    if (folder == nullptr) {
+    if (folder == nullptr || folder->getData()->type != "dir") {
         cout << "Invalid folder." << endl;
         return;
     }
@@ -272,13 +277,14 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
         if (childData->type == "file") {
             cout << "File: " << childData->name << " (Size: " << childData->size << " bytes)" << endl;
         }
+        else if (childData->type == "dir") {
 
-        // ==== Recursive call for subfolders ====
-        if (childData->type == "dir") {
+            // ==== Recursive call for subfolders ====
             displayFolderContents(childNode);
         }
 
         childIter.advance();
+       // childNode = childIter.isValid() ? childIter.item() : nullptr;
     }
 }
 
@@ -373,9 +379,10 @@ int main() {
                 string folderName;
                 cin >> folderName;
 
-                Tree<File*>* folderNode = xmlParser.findItem(folderName, xmlParser.getRoot());
+                Tree<File*>* folderNode = xmlParser.findItem(folderName, xmlParser.getRoot(), "");
 
-                if (folderNode != nullptr && folderNode->getData()->type == "dir") {
+               // if (folderNode != nullptr && folderNode->getData()->type == "dir") {
+                if (folderNode != nullptr) {
                     xmlParser.displayFolderContents(folderNode);
                 }
                 else {
@@ -385,8 +392,9 @@ int main() {
             else {
                 cout << "Root folder not found." << endl;
             }
+          
+           break;
 
-            break;
 
         case 7:
             cout << "Exiting the program.\n";
