@@ -368,7 +368,23 @@ int main() {
             break;  
 
         case 6:
-          
+            if (xmlParser.getRoot() != nullptr) {
+                cout << "Enter the name of the folder to display its contents: ";
+                string folderName;
+                cin >> folderName;
+
+                Tree<File*>* folderNode = xmlParser.findItem(folderName, xmlParser.getRoot());
+
+                if (folderNode != nullptr && folderNode->getData()->type == "dir") {
+                    xmlParser.displayFolderContents(folderNode);
+                }
+                else {
+                    cout << "Invalid folder name or not a folder." << endl;
+                }
+            }
+            else {
+                cout << "Root folder not found." << endl;
+            }
 
             break;
 
