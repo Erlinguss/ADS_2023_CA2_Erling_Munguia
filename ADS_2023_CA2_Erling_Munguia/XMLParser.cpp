@@ -223,7 +223,7 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
             // === Remove the empty folder ===
             node->children.remove(childIter);
             delete childNode;
-            childIter = node->children.getIterator(); // === or childIter.advance(); ===
+            childIter = node->children.getIterator(); 
         }
         else {
             childIter.advance();
@@ -233,14 +233,18 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
 
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
-Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode) {
-    if (currentNode->data->name.compare(itemName) == 0) {
+Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
+    string currentName = currentNode->getData()->name;
+    string newPath = currentPath + "/" + currentName;
+
+    if (currentName.find(partialName) != string::npos) {
+        cout << "Path: " << newPath << endl;
         return currentNode;
     }
 
     DListIterator<Tree<File*>*> childIter = currentNode->children.getIterator();
     while (childIter.isValid()) {
-        Tree<File*>* foundNode = findItem(itemName, childIter.item());
+        Tree<File*>* foundNode = findItem(partialName, childIter.item(), newPath);
         if (foundNode != nullptr) {
             return foundNode;
         }
@@ -249,7 +253,6 @@ Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode) {
 
     return nullptr;
 }
-
 
 
 int main() {
@@ -300,7 +303,6 @@ int main() {
             else {
                 cout << "Root folder not found.\n";
             }
-
             break;
 
         case 4: 
@@ -316,17 +318,25 @@ int main() {
             break;
         
         case 5:
+            
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Enter the name of the file/folder to find: ";
+                cout << "Enter the name of the File/Folder to find: ";
                 string itemName;
                 cin >> itemName;
 
-                Tree<File*>* foundNode = findItem(itemName, xmlParser.getRoot());
+                Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
 
+                if (foundNode != nullptr) {
+                    cout << "File/Folder found: " << foundNode->getData()->name << endl;
+                }
+                else {
+                    cout << "File/Folder not found." << endl;
+                }
             }
             else {
                 cout << "Root folder not found.\n";
             }
+
 
             break;  
 
