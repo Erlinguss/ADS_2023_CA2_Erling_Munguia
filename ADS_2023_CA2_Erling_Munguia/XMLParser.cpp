@@ -144,7 +144,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                 ++i;
             }
         }
-        
+        delete iter;  // === Release memory for the TreeIterator ===
         return tree;
     }
     catch (const exception& e) {
@@ -216,7 +216,7 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
 
 
 // ===Task 2c: Function Prune the tree to remove empty folders ===
-void pruneEmptyFolders(Tree<File*>* node) {
+void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
         Tree<File*>* childNode = childIter.item();
@@ -226,6 +226,8 @@ void pruneEmptyFolders(Tree<File*>* node) {
             // === Remove the empty folder ===
             node->children.remove(childIter);
             delete childNode;
+
+            childIter = node->children.getIterator(); // === or childIter.advance(); ===
         }
         else {
             childIter.advance();
@@ -285,8 +287,15 @@ int main() {
 
             break;
 
-
         case 4: 
+            if (xmlParser.getRoot() != nullptr) {
+                cout << "Pruning the tree to remove empty folders...\n";
+                xmlParser.pruneEmptyFolders(xmlParser.getRoot());
+                cout << "Tree pruned successfully.\n";
+            }
+            else {
+                cout << "Root folder not found.\n";
+            }
             
             break;
         
