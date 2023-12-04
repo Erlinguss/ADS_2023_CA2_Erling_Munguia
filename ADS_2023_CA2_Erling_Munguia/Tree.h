@@ -39,7 +39,7 @@ Tree<T>* Tree<T>::getRoot()
     return currentNode;
 }
 
-// === task 2a ===
+// ==== task 2a Count number of items(File/Folder) ====
 template <class T>
 int Tree<T>::count() 
 {

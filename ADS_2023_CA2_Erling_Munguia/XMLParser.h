@@ -19,8 +19,8 @@ public:
     }
     
     void setRoot(Tree<File*>* newRoot);
-    int MemoryUsageBFS(Tree<File*>* folder) const;
-    
+    int memoryUsageBFS(Tree<File*>* folder) const;
+    void pruneEmptyFolders(Tree<File*>* node);
 
 private:
    

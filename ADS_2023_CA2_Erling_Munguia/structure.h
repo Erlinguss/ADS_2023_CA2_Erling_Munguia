@@ -9,7 +9,6 @@ struct File {
 	string type;
 	int size=0;
 	
-
 };
 
 ostream& operator<<(ostream& out, File*& f)

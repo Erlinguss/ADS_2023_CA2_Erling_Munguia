@@ -25,7 +25,7 @@ template <class T>
 DListNode<T>::DListNode(DListNode<T> &node)
 {
 	//this->data = new DListNode(node->data);
-	this->data = T(node.data);
+	this->data = T(node.data); // To avoid memory leak.
 
 }
 template <class T>

@@ -163,7 +163,7 @@ root(nullptr) {}
 
 
 
-// ======= Function to parse the Tree ========
+// ========= Function to parse the Tree =========
 void XMLParser::parse() {
     ifstream file(xmlFileName);
     string xmlDocument = "";
@@ -189,8 +189,8 @@ void XMLParser::parse() {
 }
 
 
-// ===== Task 2b. Function to calculate the memory usage BFS =====
-int XMLParser::MemoryUsageBFS(Tree<File*>* folder) const {
+// ==== Task 2b. Function to calculate the memory usage BFS ====
+int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
     if (folder == nullptr) {
         return 0;
     }
@@ -213,6 +213,29 @@ int XMLParser::MemoryUsageBFS(Tree<File*>* folder) const {
     }
     return totalMemory;
 }
+
+
+// ===Task 2c: Function Prune the tree to remove empty folders ===
+void pruneEmptyFolders(Tree<File*>* node) {
+    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* childNode = childIter.item();
+        pruneEmptyFolders(childNode);
+
+        if (childNode->children.isEmpty()) {
+            // === Remove the empty folder ===
+            node->children.remove(childIter);
+            delete childNode;
+        }
+        else {
+            childIter.advance();
+        }
+    }
+}
+
+
+
+
 
 
 int main() {
@@ -248,7 +271,7 @@ int main() {
         
         case 2:
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Number of items: " << xmlParser.getRoot()->count() << endl;
+                cout << "Number of items (File/Folder): " << xmlParser.getRoot()->count() << endl;
             }
             else {
                 cout << "Root folder not found.\n";
@@ -258,12 +281,11 @@ int main() {
         
         case 3:
              if (xmlParser.getRoot() != nullptr) {
-               cout << "Memory used by the folder: " << xmlParser.MemoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+               cout << "Memory used by the folder: " << xmlParser.memoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";
             }
-           
 
             break;
 
