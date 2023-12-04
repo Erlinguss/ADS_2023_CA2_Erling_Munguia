@@ -35,8 +35,8 @@ bool XMLParser::validateXML(const string& xmlDocument) {
             }
 
             if (tag[0] == '/') {
-                if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
-               
+                //if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
+                if (tagStack.empty() || tag.compare(1, string::npos, tagStack.top()) != 0) {
                     return false;
                 }
                 tagStack.pop();
@@ -78,7 +78,6 @@ void displayTree(TreeIterator<T> iter, string indent)
 
 // ================ Build the Tree ===============
 Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
-    //stack<Tree<File>*> nodeStack;
     size_t i = 0;
     File* currentFile = nullptr;
     Tree<File*>* tree = nullptr;
@@ -153,14 +152,13 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     }
 }
 
-// ========== Method set the Root ================
+// ========== Method set the Root ===============
 void XMLParser::setRoot(Tree<File*>* newRoot) {
     root = newRoot;
 }
 
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
-
 
 
 // ========= Function to parse the Tree =========
@@ -189,7 +187,7 @@ void XMLParser::parse() {
 }
 
 
-// ==== Task 2b. Function to calculate the memory usage BFS ====
+//=== Task 2b. Function to calculate the memory usage BFS ===
 int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
     if (folder == nullptr) {
         return 0;
@@ -215,7 +213,7 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
 }
 
 
-// ===Task 2c: Function Prune the tree to remove empty folders ===
+// =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
@@ -234,6 +232,9 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
         }
     }
 }
+
+
+
 
 
 int main() {
@@ -289,7 +290,7 @@ int main() {
 
         case 4: 
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Pruning the tree to remove empty folders...\n";
+                cout << "Pruning the tree to remove empty folders\n";
                 xmlParser.pruneEmptyFolders(xmlParser.getRoot());
                 cout << "Tree pruned successfully.\n";
             }
