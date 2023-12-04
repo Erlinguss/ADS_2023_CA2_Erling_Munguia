@@ -234,6 +234,23 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
 }
 
 
+// ===== Task 2d: Find a given folder using Depth First Search ======
+Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode) {
+    if (currentNode->data->name.compare(itemName) == 0) {
+        return currentNode;
+    }
+
+    DListIterator<Tree<File*>*> childIter = currentNode->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* foundNode = findItem(itemName, childIter.item());
+        if (foundNode != nullptr) {
+            return foundNode;
+        }
+        childIter.advance();
+    }
+
+    return nullptr;
+}
 
 
 
