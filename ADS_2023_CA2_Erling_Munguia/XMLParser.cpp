@@ -186,7 +186,6 @@ void XMLParser::parse() {
 
 }
 
-
 //=== Task 2b. Function to calculate the memory usage BFS ===
 int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
     if (folder == nullptr) {
@@ -224,7 +223,6 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
             // === Remove the empty folder ===
             node->children.remove(childIter);
             delete childNode;
-
             childIter = node->children.getIterator(); // === or childIter.advance(); ===
         }
         else {
@@ -318,8 +316,19 @@ int main() {
             break;
         
         case 5:
+            if (xmlParser.getRoot() != nullptr) {
+                cout << "Enter the name of the file/folder to find: ";
+                string itemName;
+                cin >> itemName;
 
-            break;
+                Tree<File*>* foundNode = findItem(itemName, xmlParser.getRoot());
+
+            }
+            else {
+                cout << "Root folder not found.\n";
+            }
+
+            break;  
 
         case 6:
 
