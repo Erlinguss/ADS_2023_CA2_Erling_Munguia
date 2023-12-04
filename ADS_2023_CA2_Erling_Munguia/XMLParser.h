@@ -21,9 +21,8 @@ public:
     void setRoot(Tree<File*>* newRoot);
     int memoryUsageBFS(Tree<File*>* folder) const;
     void pruneEmptyFolders(Tree<File*>* node);
-    //Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode);
     Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode, string currentPath = "");
-
+    void displayFolderContents(Tree<File*>* folder) const;
 private:
    
     std::string xmlFileName;

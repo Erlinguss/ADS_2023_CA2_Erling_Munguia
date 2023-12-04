@@ -255,6 +255,26 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 }
 
 
+// ==== Task 2e: Display the contents of a given folder including file sizes ====
+void XMLParser::displayFolderContents(Tree<File*>* folder) const {
+    if (folder == nullptr) {
+        cout << "Invalid folder." << endl;
+        return;
+    }
+
+    cout << "Contents of folder '" << folder->getData()->name << "':" << endl;
+
+    DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* childNode = childIter.item();
+        File* childData = childNode->getData();
+
+        
+    }
+}
+
+
+
 int main() {
     int choice;
     string xmlFileName;
@@ -263,9 +283,9 @@ int main() {
     do {
         cout << "\n";
         cout << "=====================================================\n";
-        cout << "|                Select an option:                  |\n";
+        cout << "|                     Menu System:                  |\n";
         cout << "=====================================================\n";
-        cout << "| 1. Validate XML, built the tree and Displayed     |\n";
+        cout << "| 1. Validate XML file, built and Display the tree  |\n";
         cout << "| 2. Number of items within a given folder directory|\n";
         cout << "| 3. Memory used by a given folder.                 |\n";
         cout << "| 4. Prune the tree to remove empty folders         |\n";
@@ -314,7 +334,6 @@ int main() {
             else {
                 cout << "Root folder not found.\n";
             }
-            
             break;
         
         case 5:
@@ -337,10 +356,10 @@ int main() {
                 cout << "Root folder not found.\n";
             }
 
-
             break;  
 
         case 6:
+          
 
             break;
 
