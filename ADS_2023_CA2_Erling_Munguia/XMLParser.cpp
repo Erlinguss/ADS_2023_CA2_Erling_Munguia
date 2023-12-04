@@ -269,7 +269,16 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
         Tree<File*>* childNode = childIter.item();
         File* childData = childNode->getData();
 
-        
+        if (childData->type == "file") {
+            cout << "File: " << childData->name << " (Size: " << childData->size << " bytes)" << endl;
+        }
+
+        // ==== Recursive call for subfolders ====
+        if (childData->type == "dir") {
+            displayFolderContents(childNode);
+        }
+
+        childIter.advance();
     }
 }
 
