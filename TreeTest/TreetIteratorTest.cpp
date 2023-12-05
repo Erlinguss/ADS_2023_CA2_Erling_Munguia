@@ -72,6 +72,45 @@ namespace TreeIteratorTest
 
 			}
 
+			// ===Tests the root function moves the iterator to the root of the tree if it is set to a leaf node, cc2. ===
+			TEST_METHOD(TestRoot)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(cc2);
+				Assert::AreEqual(5, iter.node->data);
+				iter.root();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(1, iter.node->data);
+			}
+
+			// === "Tests up method moves from leaf to parent (iterator at 5, parent 2), resetIterator to correct child node. ===
+			TEST_METHOD(TestUp)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(cc2);
+				Assert::AreEqual(5, iter.node->data);
+				Assert::IsFalse(iter.childIter.isValid());
+
+				iter.up();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(2, iter.node->data);
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+
+				iter.up();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(1, iter.node->data);
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+
+
+			}
+
+
 
 
 
