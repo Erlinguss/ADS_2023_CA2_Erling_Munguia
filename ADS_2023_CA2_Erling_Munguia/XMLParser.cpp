@@ -232,6 +232,20 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     }
 }
 
+// ===== Function to check non empty folders =====
+bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
+    DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
+    while (childIter.isValid()) {
+        File* childData = childIter.item()->getData();
+        if (childData->size > 0) {
+            return true;  
+        }
+        childIter.advance();
+    }
+    return false;  
+}
+
+
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
 Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
