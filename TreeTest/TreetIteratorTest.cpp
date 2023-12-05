@@ -130,7 +130,7 @@ namespace TreeIteratorTest
 			}
 
 
-			// === Tests down function moves from root to correct child and works for any child node set by the child iterator. ===
+			// ===Tests down function from root to correct child, works for any child set by the iterator. ===
 			TEST_METHOD(TestDownFromRoot)
 			{
 				Tree<int>* root = nullptr;
@@ -201,7 +201,107 @@ namespace TreeIteratorTest
 
 			}
 
+			// ===Tests the childStart method moves to the first child element. ===
+			TEST_METHOD(TestChildStart)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.childIter.advance();
+				iter.childIter.advance();
+				Assert::AreEqual(6, iter.childIter.item()->getData());
+				iter.childStart();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+
+			}
 		
+			
+            // ===Tests the childEnd method moves to the last child element.===
+			TEST_METHOD(TestChildEnd)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.childEnd();
+				Assert::AreEqual(6, iter.childIter.item()->getData());
+
+			}
+			
+			// ===Tests the append child method adds an element to the end of the child list. ===
+			TEST_METHOD(TestAppendChild)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.appendChild(7);
+				iter.childEnd();
+				Assert::AreEqual(7, iter.childIter.item()->getData());
+
+			}
+			
+			// === Tests the prepend child method adds an element to the start of the child list. ===
+			TEST_METHOD(TestPrependChild)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.prependChild(7);
+				Assert::AreEqual(7, iter.childIter.item()->getData());
+
+			}
+
+			
+             //===Tests the insert before child method adds an element before the item selected in the child iterator. ===
+			TEST_METHOD(TestInsertChildBefore)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				int startChildren[] = { 4,5,6 };
+				for (int i = 0; i < 3; i++)
+				{
+					Assert::AreEqual(startChildren[i], iter.childIter.item()->getData());
+					if (i != 2)
+					{
+						iter.childForth();
+					}
+
+				}
+				iter.childStart();
+				Assert::IsTrue(iter.childIter.isValid());
+				iter.childForth();
+				Assert::AreEqual(5, iter.childIter.item()->getData());
+				iter.insertChildBefore(7);
+				iter.childStart();
+				int endChildren[] = { 4,7,5,6 };
+				for (int i = 0; i < 4; i++)
+				{
+					Assert::AreEqual(endChildren[i], iter.childIter.item()->getData());
+					iter.childForth();
+
+				}
+				iter.childStart();
+			}
+
 
 
 
