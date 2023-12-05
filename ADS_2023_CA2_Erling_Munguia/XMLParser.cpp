@@ -124,7 +124,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                         currentFile->name = data;
                     }
                     else if (tag == "length") {
-                        currentFile->size = stoi(data);
+                        currentFile->size = stoi(data);  
                     }
                     else if (tag == "type") {
                         currentFile->type = data;
@@ -287,7 +287,6 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
        // childNode = childIter.isValid() ? childIter.item() : nullptr;
     }
 }
-
 
 
 int main() {
