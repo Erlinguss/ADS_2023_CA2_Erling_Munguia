@@ -137,7 +137,7 @@ void TreeIterator<T>::insertChildBefore(T item)
 {
 	Tree<T>* temp = new Tree<T>(item);
 	temp->parent = node;
-	node->children->insert(childIter, temp);
+	node->children.insert(childIter, temp);
 }
 
 template <class T>
@@ -148,7 +148,7 @@ void TreeIterator<T>::insertChildAfter(T item)
 	temp->parent = node;
 
 	childIter.advance();
-	node->children->insert(childIter, temp);
+	node->children.insert(childIter, temp);
 	childIter.previous();
 	childIter.previous();
 	//childIter.currentNode->insertAfter(temp);
@@ -158,7 +158,7 @@ void TreeIterator<T>::insertChildAfter(T item)
 template <class T>
 void TreeIterator<T>::removeChild()
 {
-	childIter = node->children->remove(childIter);
+	childIter = node->children.remove(childIter);
 }
 
 template <class T>

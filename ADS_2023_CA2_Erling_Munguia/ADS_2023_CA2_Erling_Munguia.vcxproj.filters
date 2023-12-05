@@ -43,11 +43,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example.xml">
-      <Filter>Source Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example1.xml">
       <Filter>Source Files</Filter>
     </Xml>

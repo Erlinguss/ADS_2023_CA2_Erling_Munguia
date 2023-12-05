@@ -31,9 +31,6 @@
     <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example1.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
