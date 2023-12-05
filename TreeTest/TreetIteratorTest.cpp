@@ -111,6 +111,99 @@ namespace TreeIteratorTest
 			}
 
 
+			//===Tests UP function prevents iterator from going beyond the root and triggers reset on exceeding root.===
+			TEST_METHOD(TestUpFromRoot)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.childIter.advance();
+				Assert::AreEqual(3, iter.childIter.item()->getData());
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(1, iter.node->data);
+				iter.up();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(1, iter.node->data);
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+			}
+
+
+			// === Tests down function moves from root to correct child and works for any child node set by the child iterator. ===
+			TEST_METHOD(TestDownFromRoot)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				Assert::AreEqual(1, iter.node->data);
+				Assert::IsTrue(iter.childIter.isValid());
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+
+				iter.down();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(2, iter.node->data);
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.childForth();
+				iter.down();
+				Assert::IsNotNull(iter.node);
+				Assert::AreEqual(5, iter.node->data);
+				Assert::IsFalse(iter.childIter.isValid());
+
+			}
+
+			// ===Tests down function prevents iterator invalidation when there are no node children ===
+			TEST_METHOD(TestDownFromLeaf)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(cc2);
+				Assert::AreEqual(5, iter.node->data);
+				Assert::IsFalse(iter.childIter.isValid());
+
+				iter.down();
+				Assert::AreEqual(5, iter.node->data);
+				Assert::IsFalse(iter.childIter.isValid());
+
+			}
+
+			// === Tests child back method for iteratively moving back to the previous child node. ===
+			TEST_METHOD(TestChildBack)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+				iter.childIter.advance();
+				Assert::AreEqual(3, iter.childIter.item()->getData());
+				iter.childBack();
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+
+			}
+
+			// === Tests the childForth method moves to teh next child element. ===
+			TEST_METHOD(TestChildForth)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				Assert::AreEqual(2, iter.childIter.item()->getData());
+				iter.childForth();
+				Assert::AreEqual(3, iter.childIter.item()->getData());
+
+			}
+
+		
+
+
 
 
 
