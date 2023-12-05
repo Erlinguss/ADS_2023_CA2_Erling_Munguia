@@ -39,27 +39,21 @@ Tree<T>* Tree<T>::getRoot()
     return currentNode;
 }
 
+
 // ==== task 2a Count number of items(File/Folder) ====
-
 template <class T>
-int Tree<T>::count()
+int Tree<T>::count() 
 {
-    int totalCount = 1;
+    int totalCount = 1; 
     DListIterator<Tree<T>*> childIter = children.getIterator();
-
-    // === Debugging output ===
-    std::cout << "Debug: Counting node with data " << data << std::endl;
-
     while (childIter.isValid())
     {
         totalCount += childIter.item()->count();
         childIter.advance();
     }
-
-    // === Debugging output ===
-    std::cout << "Debug: Total count for node " << data << " is " << totalCount << std::endl;
-
     return totalCount;
 }
+
+
 
 

@@ -57,7 +57,7 @@ namespace TreeTest
 			childTwo.children.append(&subChild);
 			tree.children.append(&childOne);
 			tree.children.append(&childTwo);
-			Assert::AreEqual(4, tree.count()); 
+			Assert::AreEqual(5, tree.count()); 
 		}
 
 		TEST_METHOD(TestDataRetrieval)
