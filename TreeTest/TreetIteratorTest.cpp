@@ -12,7 +12,6 @@ namespace TreeIteratorTest
 	{
 	public:
 
-			
 			//	=== Helper function used to set up the tree used for testing. ===
 			void populateTree(Tree<int>*& root, Tree<int>*& cc2)
 			{
@@ -37,7 +36,6 @@ namespace TreeIteratorTest
 			}
 		
 		    // ===Test the resetIterator function sets list and currentNode to nullptr if no tree is passed in. ===
-			
 			TEST_METHOD(TestResetIteratorNullPtr)
 			{
 				TreeIterator<int> iter(nullptr);
@@ -48,7 +46,6 @@ namespace TreeIteratorTest
 
 		
 	        // ==Tests the resetIterator sets list and currentNode to nullptr if a tree with no children is passed in. ===
-
 			TEST_METHOD(TestResetIteratorValidTreeNoChild)
 			{
 				Tree<int> t(1);
@@ -59,7 +56,6 @@ namespace TreeIteratorTest
 			}
 
 			//===Tests the reset iterator function sets the childIter to the first child when a valid tree is passed in. ===
-	
 			TEST_METHOD(TestResetIteratorValidTreeWithChild)
 			{
 				Tree<int>* root = nullptr;
@@ -153,6 +149,7 @@ namespace TreeIteratorTest
 				Assert::IsFalse(iter.childIter.isValid());
 
 			}
+
 
 			// ===Tests down function prevents iterator invalidation when there are no node children ===
 			TEST_METHOD(TestDownFromLeaf)
@@ -267,7 +264,7 @@ namespace TreeIteratorTest
 			}
 
 			
-             //===Tests the insert before child method adds an element before the item selected in the child iterator. ===
+            //===Tests the insert before child method adds an element before the item selected in the child iterator. ===
 			TEST_METHOD(TestInsertChildBefore)
 			{
 				Tree<int>* root = nullptr;
@@ -302,10 +299,73 @@ namespace TreeIteratorTest
 				iter.childStart();
 			}
 
+			// ===Tests the insert after child method adds an element after the item selected in the child iterator. ===
+			TEST_METHOD(TestInsertChildAfter)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				int startChildren[] = { 4,5,6 };
+				for (int i = 0; i < 3; i++)
+				{
+					Assert::AreEqual(startChildren[i], iter.childIter.item()->getData());
+					if (i != 2)
+					{
+						iter.childForth();
+					}
 
+				}
+				iter.childStart();
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.insertChildAfter(7);
+				Assert::AreEqual(4, iter.childIter.item()->getData());
+				iter.childStart();
+				int endChildren[] = { 4,7,5,6 };
+				for (int i = 0; i < 4; i++)
+				{
+					Assert::AreEqual(endChildren[i], iter.childIter.item()->getData());
+					iter.childForth();
 
+				}
+				iter.childStart();
+			}
 
+		
+		    //=== Tests the remove child method removes the item selected by the iterator. ===
+			TEST_METHOD(TestRmoveChild)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				Assert::IsNotNull(root);
+				TreeIterator<int> iter(root);
+				iter.down();
+				int startChildren[] = { 4,5,6 };
+				for (int i = 0; i < 3; i++)
+				{
+					Assert::AreEqual(startChildren[i], iter.childIter.item()->getData());
+					if (i != 2)
+					{
+						iter.childForth();
+					}
 
+				}
+				iter.childStart();
+				iter.childForth();
+				iter.removeChild();
+				iter.childStart();
+				int endChildren[] = { 4,6 };
+				for (int i = 0; i < 2; i++)
+				{
+					Assert::AreEqual(endChildren[i], iter.childIter.item()->getData());
+					iter.childForth();
+
+				}
+				iter.childStart();
+			}
 
 			
 		};
