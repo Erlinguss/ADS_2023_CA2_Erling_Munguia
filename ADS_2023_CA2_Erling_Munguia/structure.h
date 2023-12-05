@@ -7,7 +7,7 @@ struct File {
 
 	string name;
 	string type;
-	int size;
+	int size =0;
 	
 };
 

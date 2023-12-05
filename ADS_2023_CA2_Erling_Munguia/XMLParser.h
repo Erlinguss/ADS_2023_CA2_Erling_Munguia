@@ -23,13 +23,13 @@ public:
     void pruneEmptyFolders(Tree<File*>* node);
     Tree<File*>* findItem(const string& itemName, Tree<File*>* currentNode, string currentPath = "");
     void displayFolderContents(Tree<File*>* folder) const;
+    bool containsNonEmptyFiles(Tree<File*>* folder);
 
 private:
    
     std::string xmlFileName;
     Tree<File*>* root;
     bool validateXML(const string& xmlDocument);
-    bool containsNonEmptyFiles(Tree<File*>* folder);
     Tree<File*>* builtTree(const string& xmlDocument);
 };
 

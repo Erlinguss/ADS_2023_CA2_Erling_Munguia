@@ -82,7 +82,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     File* currentFile = nullptr;
     Tree<File*>* tree = nullptr;
     TreeIterator<File*>* iter = nullptr;
-
+   
     try {
         while (i < xmlDocument.size()) {
             if (xmlDocument[i] == '<') {
@@ -175,7 +175,7 @@ void XMLParser::parse() {
         cout << "Invalid XML document." << endl;
         return;
     }
-
+    
     Tree<File*>* tree = builtTree(xmlDocument);
 
     if (tree != nullptr) {
@@ -252,8 +252,7 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
     string newPath = currentPath + "/" + currentName;
 
     if (currentName.find(partialName) != string::npos) {
-    //if (currentName.find(partialName) != string::npos && currentNode->getData()->type == "file") {
-
+   
     cout << "Path: " << newPath << endl;
         
        // if (currentNode->getData()->type == "dir") {
@@ -277,15 +276,13 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
-    
-    //if (folder == nullptr || folder->getData()->type != "dir") {
+
     if (folder == nullptr) {
         cout << "Invalid folder." << endl;
         return;
     }
 
-
-    cout << "Contents of folder '" << folder->getData()->name << "':" << endl;
+    cout << "Folder: " << folder->getData()->name << " (Size: " << folder->getData()->size << " bytes)" << endl;
 
     DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
     while (childIter.isValid()) {
@@ -296,13 +293,11 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
             cout << "File: " << childData->name << " (Size: " << childData->size << " bytes)" << endl;
         }
         else if (childData->type == "dir") {
-
-            // ==== Recursive call for subfolders ====
+            //=== Recursive call for subfolders ===
             displayFolderContents(childNode);
         }
-
         childIter.advance();
-        }
+    }
 }
 
 
@@ -396,8 +391,6 @@ int main() {
                 cin >> folderName;
 
                 Tree<File*>* folderNode = xmlParser.findItem(folderName, xmlParser.getRoot(), "");
-
-               // if (folderNode != nullptr && folderNode->getData()->type == "dir") {
                 if (folderNode != nullptr) {
                     xmlParser.displayFolderContents(folderNode);
                 }
