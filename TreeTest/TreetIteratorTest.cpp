@@ -13,7 +13,7 @@ namespace TreeIteratorTest
 	public:
 
 			
-			//===Helper function used to set up the tree used for testing.===
+			//	=== Helper function used to set up the tree used for testing. ===
 			void populateTree(Tree<int>*& root, Tree<int>*& cc2)
 			{
 				root = new Tree<int>(1);
@@ -35,6 +35,46 @@ namespace TreeIteratorTest
 				c1->children.append(cc2);
 				c1->children.append(cc3);
 			}
+		
+		    // ===Test the resetIterator function sets list and currentNode to nullptr if no tree is passed in. ===
+			
+			TEST_METHOD(TestResetIteratorNullPtr)
+			{
+				TreeIterator<int> iter(nullptr);
+				Assert::IsNull(iter.childIter.list);
+				Assert::IsNull(iter.childIter.currentNode);
+
+			}
+
+		
+	        // ==Tests the resetIterator sets list and currentNode to nullptr if a tree with no children is passed in. ===
+
+			TEST_METHOD(TestResetIteratorValidTreeNoChild)
+			{
+				Tree<int> t(1);
+				TreeIterator<int> iter(&t);
+				Assert::IsNotNull(iter.childIter.list);
+				Assert::IsNull(iter.childIter.currentNode);
+
+			}
+
+			//===Tests the reset iterator function sets the childIter to the first child when a valid tree is passed in. ===
+	
+			TEST_METHOD(TestResetIteratorValidTreeWithChild)
+			{
+				Tree<int>* root = nullptr;
+				Tree<int>* cc2 = nullptr;
+				populateTree(root, cc2);
+				TreeIterator<int> iter(root);
+				Assert::IsNotNull(iter.childIter.list);
+				Assert::IsNotNull(iter.childIter.currentNode);
+				Assert::AreEqual(2, iter.childIter.currentNode->data->data);
+
+			}
+
+
+
+
 			
 		};
 }
