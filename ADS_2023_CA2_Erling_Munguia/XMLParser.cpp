@@ -246,14 +246,15 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
 }
 
 
-
 // ===== Task 2d: Find a given folder using Depth First Search ======
 Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
     string currentName = currentNode->getData()->name;
     string newPath = currentPath + "/" + currentName;
 
     if (currentName.find(partialName) != string::npos) {
-        cout << "Path: " << newPath << endl;
+    //if (currentName.find(partialName) != string::npos && currentNode->getData()->type == "file") {
+
+    cout << "Path: " << newPath << endl;
         
        // if (currentNode->getData()->type == "dir") {
             return currentNode;
@@ -276,10 +277,13 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
-    if (folder == nullptr || folder->getData()->type != "dir") {
+    
+    //if (folder == nullptr || folder->getData()->type != "dir") {
+    if (folder == nullptr) {
         cout << "Invalid folder." << endl;
         return;
     }
+
 
     cout << "Contents of folder '" << folder->getData()->name << "':" << endl;
 
@@ -298,8 +302,7 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
         }
 
         childIter.advance();
-       // childNode = childIter.isValid() ? childIter.item() : nullptr;
-    }
+        }
 }
 
 
@@ -421,26 +424,3 @@ int main() {
 } 
 
 
-/*
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
-    return 0;
-}*/
