@@ -219,14 +219,15 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
         Tree<File*>* childNode = childIter.item();
         pruneEmptyFolders(childNode);
 
-        if (childNode->children.size() == 0) {
+        // ===Check if the folder is empty or if it contains only empty folders ===
+        if (childNode->children.size() == 0 || containsNonEmptyFiles(childNode)) {
+            childIter.advance();
+        }
+        else {
             // === Remove the empty folder ===
             node->children.remove(childIter);
             delete childNode;
-            childIter = node->children.getIterator(); 
-        }
-        else {
-            childIter.advance();
+            childIter = node->children.getIterator();
         }
     }
 }
@@ -257,7 +258,6 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
     return nullptr;
 }
-
 
 
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
@@ -338,8 +338,8 @@ int main() {
                 cout << "Root folder not found.\n";
             }
             break;
-
-        case 4: 
+      
+        case 4:
             if (xmlParser.getRoot() != nullptr) {
                 cout << "Pruning the tree to remove empty folders\n";
                 xmlParser.pruneEmptyFolders(xmlParser.getRoot());
@@ -394,7 +394,6 @@ int main() {
           
            break;
 
-
         case 7:
             cout << "Exiting the program.\n";
             break;
@@ -406,8 +405,6 @@ int main() {
 
     return 0;
 } 
-
-
 
 
 /*

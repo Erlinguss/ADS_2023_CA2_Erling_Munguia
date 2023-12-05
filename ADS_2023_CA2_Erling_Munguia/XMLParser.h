@@ -29,6 +29,7 @@ private:
     std::string xmlFileName;
     Tree<File*>* root;
     bool validateXML(const string& xmlDocument);
+    bool containsNonEmptyFiles(Tree<File*>* folder);
     Tree<File*>* builtTree(const string& xmlDocument);
 };
 

@@ -125,7 +125,6 @@ namespace TreeIteratorTest
 				Assert::AreEqual(2, iter.childIter.item()->getData());
 			}
 
-
 			// ===Tests down function from root to correct child, works for any child set by the iterator. ===
 			TEST_METHOD(TestDownFromRoot)
 			{
@@ -149,7 +148,6 @@ namespace TreeIteratorTest
 				Assert::IsFalse(iter.childIter.isValid());
 
 			}
-
 
 			// ===Tests down function prevents iterator invalidation when there are no node children ===
 			TEST_METHOD(TestDownFromLeaf)
@@ -216,7 +214,6 @@ namespace TreeIteratorTest
 
 			}
 		
-			
             // ===Tests the childEnd method moves to the last child element.===
 			TEST_METHOD(TestChildEnd)
 			{
@@ -263,7 +260,6 @@ namespace TreeIteratorTest
 
 			}
 
-			
             //===Tests the insert before child method adds an element before the item selected in the child iterator. ===
 			TEST_METHOD(TestInsertChildBefore)
 			{
@@ -333,7 +329,6 @@ namespace TreeIteratorTest
 				iter.childStart();
 			}
 
-		
 		    //=== Tests the remove child method removes the item selected by the iterator. ===
 			TEST_METHOD(TestRmoveChild)
 			{
@@ -367,6 +362,5 @@ namespace TreeIteratorTest
 				iter.childStart();
 			}
 
-			
 		};
 }

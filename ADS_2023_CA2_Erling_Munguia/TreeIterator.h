@@ -151,7 +151,6 @@ void TreeIterator<T>::insertChildAfter(T item)
 	node->children.insert(childIter, temp);
 	childIter.previous();
 	childIter.previous();
-	//childIter.currentNode->insertAfter(temp);
 
 }
 
