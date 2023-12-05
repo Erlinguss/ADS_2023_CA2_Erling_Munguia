@@ -128,7 +128,7 @@ void TreeIterator<T>::prependChild(T item)
 {
 	Tree<T>* temp = new Tree<T>(item);
 	temp->parent = node;
-	node->children->prepend(temp);
+	node->children.prepend(temp);
 	resetIterator();
 }
 

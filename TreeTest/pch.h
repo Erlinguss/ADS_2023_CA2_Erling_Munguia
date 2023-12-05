@@ -9,4 +9,7 @@
 
 // add headers that you want to pre-compile here
 
+// Headers for CppUnitTest
+#include "CppUnitTest.h"
+
 #endif //PCH_H

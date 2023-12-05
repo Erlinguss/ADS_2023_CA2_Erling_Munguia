@@ -66,7 +66,5 @@ namespace TreeTest
 			Assert::AreEqual(std::string("Root"), stringTree.getData());
 		}
 
-	
-
 	};
 }
