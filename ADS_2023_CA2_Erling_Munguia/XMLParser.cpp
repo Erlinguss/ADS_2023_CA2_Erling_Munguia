@@ -9,9 +9,7 @@
 #include "TreeIterator.h"
 #include "XMLParser.h"
 using namespace std;
-
 #include <SFML/Graphics.hpp>
-#include "SFML/Graphics.hpp"
 
 
 //======= Implementation of XMLParser Validation ========
@@ -272,11 +270,8 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
     return nullptr;
 }
-
-
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
-
     if (folder == nullptr) {
         cout << "Invalid folder." << endl;
         return;
@@ -289,17 +284,43 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
         Tree<File*>* childNode = childIter.item();
         File* childData = childNode->getData();
 
+        cout << "Child: " << childData->name << " (Type: " << childData->type << ", Size: " << childData->size << " bytes)" << endl;
+
         if (childData->type == "file") {
             cout << "File: " << childData->name << " (Size: " << childData->size << " bytes)" << endl;
-        }
+        } 
         else if (childData->type == "dir") {
-            //=== Recursive call for subfolders ===
+            // === Recursive call for subfolders ===
             displayFolderContents(childNode);
         }
         childIter.advance();
     }
 }
 
+
+/*
+int main1()
+{
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        window.draw(shape);
+        window.display();
+    }
+
+    return 0;
+}*/
 
 int main() {
     int choice;
@@ -405,13 +426,19 @@ int main() {
            break;
 
         case 7:
+            //int main1();
+   
+            break;
+
+        case 8:
+            
             cout << "Exiting the program.\n";
             break;
 
         default:
             cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 7);
+    } while (choice != 8);
 
     return 0;
 } 
