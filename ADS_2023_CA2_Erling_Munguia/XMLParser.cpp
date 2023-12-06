@@ -248,6 +248,8 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
 Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
     string currentName = currentNode->getData()->name;
     string newPath = currentPath + "/" + currentName;
+   
+  
 
     if (currentName.find(partialName) != string::npos) {
    
@@ -298,7 +300,6 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
 }
 
 
-/*
 int main1()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
@@ -320,7 +321,8 @@ int main1()
     }
 
     return 0;
-}*/
+}
+
 
 int main() {
     int choice;
@@ -404,7 +406,7 @@ int main() {
             }
 
             break;  
-
+        
         case 6:
             if (xmlParser.getRoot() != nullptr) {
                 cout << "Enter the name of the folder to display its contents: ";
@@ -422,11 +424,11 @@ int main() {
             else {
                 cout << "Root folder not found." << endl;
             }
-          
-           break;
+             break;
+           
 
         case 7:
-            //int main1();
+            int main1();
    
             break;
 
