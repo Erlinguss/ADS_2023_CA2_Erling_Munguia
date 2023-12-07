@@ -299,7 +299,7 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
     }
 }
 
-
+/*
 int main() {
     int choice;
     string xmlFileName;
@@ -414,5 +414,5 @@ int main() {
 
     return 0;
 } 
-
+*/
 

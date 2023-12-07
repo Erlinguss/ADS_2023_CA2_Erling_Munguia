@@ -73,7 +73,7 @@ bool handleEvent(XMLParser& xmlParser) {
                 sf::FloatRect buttonBounds5(10, 150, ButtonWidth, ButtonHeight);
                 sf::FloatRect buttonBounds6(10, 180, ButtonWidth, ButtonHeight);
 
-                sf::FloatRect buttonBounds1(10, 10, ButtonWidth, ButtonHeight);
+               
                
                 if (buttonBounds1.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     std::cout << "Button 1 Clicked" << std::endl;
@@ -105,7 +105,62 @@ bool handleEvent(XMLParser& xmlParser) {
                         std::cout << "Root folder not found.\n";
                     }
                 }
+                else if (buttonBounds4.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Button 4 Clicked!\n" << std::endl;
 
+                    // ======= prune the tree to remove empty folders. =======
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Pruning the tree to remove empty folders\n";
+                        xmlParser.pruneEmptyFolders(xmlParser.getRoot());
+                        std::cout << "Tree pruned successfully.\n";
+                    }
+                    else {
+                        std::cout << "Root folder not found.\n";
+                    }
+                }
+                else if (buttonBounds5.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Button 5 Clicked!\n" << std::endl;
+
+                    // =======find a given file/folder===========
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Enter the name of the File/Folder to find: ";
+                        std::string itemName;
+                        std::cin >> itemName;
+
+                        Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
+
+                        if (foundNode != nullptr) {
+                            std::cout << "File/Folder found: " << foundNode->getData()->name << std::endl;
+                        }
+                        else {
+                            std::cout << "File/Folder not found." << std::endl;
+                        }
+                    }
+                    else {
+                        std::cout << "Root folder not found.\n";
+                    }
+                }
+                else if (buttonBounds6.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Button 6 Clicked!\n" << std::endl;
+
+                    // ======display the contents of a given folder ======
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Enter the name of the folder to display its contents: ";
+                        std::string folderName;
+                        std::cin >> folderName;
+
+                        Tree<File*>* folderNode = xmlParser.findItem(folderName, xmlParser.getRoot(), "");
+                        if (folderNode != nullptr) {
+                            xmlParser.displayFolderContents(folderNode);
+                        }
+                        else {
+                            std::cout << "Invalid folder name or not a folder." << std::endl;
+                        }
+                    }
+                    else {
+                        std::cout << "Root folder not found." << std::endl;
+                    }
+                }
 
             }
         }
@@ -113,7 +168,6 @@ bool handleEvent(XMLParser& xmlParser) {
 
     return true;
 }
-
 
 int main() {
     std::string xmlFileName;
@@ -128,9 +182,7 @@ int main() {
             break;
         }
 
-
         window.display();
-
 
         sf::sleep(sf::milliseconds(16));
     }
