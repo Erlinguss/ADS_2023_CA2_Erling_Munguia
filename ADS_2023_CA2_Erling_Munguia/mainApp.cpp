@@ -53,7 +53,6 @@ void drawGUI(const XMLParser& xmlParser) {
 }
 
 
-
 bool handleEvent(XMLParser& xmlParser) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -68,14 +67,43 @@ bool handleEvent(XMLParser& xmlParser) {
 
 
                 sf::FloatRect buttonBounds1(10, 10, ButtonWidth, ButtonHeight);
+                sf::FloatRect buttonBounds2(10, 60, ButtonWidth, ButtonHeight);
+                sf::FloatRect buttonBounds3(10, 90, ButtonWidth, ButtonHeight);
+                sf::FloatRect buttonBounds4(10, 120, ButtonWidth, ButtonHeight);
+                sf::FloatRect buttonBounds5(10, 150, ButtonWidth, ButtonHeight);
+                sf::FloatRect buttonBounds6(10, 180, ButtonWidth, ButtonHeight);
+
+                sf::FloatRect buttonBounds1(10, 10, ButtonWidth, ButtonHeight);
                
                 if (buttonBounds1.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
-                    std::cout << "Button 1 Clicked!" << std::endl;
+                    std::cout << "Button 1 Clicked" << std::endl;
 
                     // ===== validate XML, build and display the tree ======
                     std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia_Urbina/ADS_2023_CA2_Erling_Munguia_Urbina/Example1.xml";
                     xmlParser = XMLParser(xmlFileName);
                     xmlParser.parse();
+                }
+                else if (buttonBounds2.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Button 2 Clicked\n" << std::endl;
+
+                    // ===== display the number of items in a folder directory. =====
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Number of items (File/Folder): " << xmlParser.getRoot()->count() << std::endl;
+                    }
+                    else {
+                        std::cout << "Root folder not found.\n";
+                    }
+                }
+                else if (buttonBounds3.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Button 3 Clicked\n" << std::endl;
+
+                    // ======display the memory used by a given folder ======
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Memory used by the folder: " << xmlParser.memoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+                    }
+                    else {
+                        std::cout << "Root folder not found.\n";
+                    }
                 }
 
 
