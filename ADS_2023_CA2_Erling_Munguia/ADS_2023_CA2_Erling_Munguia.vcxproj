@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mainApp.cpp" />
+    <ClCompile Include="structure.cpp" />
     <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>

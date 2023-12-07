@@ -7,12 +7,8 @@ struct File {
 
 	string name;
 	string type;
-	int size =0;
-	
+	int size = 0;
+
 };
 
-ostream& operator<<(ostream& out, File*& f)
-{
-	return out << f->name << "(" << f->size << ")" << f->type;
-
-}
+ostream& operator<<(ostream& out, File*& f);

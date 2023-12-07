@@ -44,6 +44,9 @@
     <ClCompile Include="mainApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="structure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example1.xml">

@@ -19,3 +19,5 @@ void drawGUI(const XMLParser& xmlParser) {
 
     window.display();
 }
+
+
