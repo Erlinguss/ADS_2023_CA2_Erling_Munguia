@@ -8,9 +8,9 @@
 #include "structure.h"
 #include "TreeIterator.h"
 #include "XMLParser.h"
-using namespace std;
 #include <SFML/Graphics.hpp>
 
+using namespace std;
 
 //======= Implementation of XMLParser Validation ========
 bool XMLParser::validateXML(const string& xmlDocument) {
@@ -300,30 +300,6 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
 }
 
 
-int main1()
-{
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
-    return 0;
-}
-
-
 int main() {
     int choice;
     string xmlFileName;
@@ -425,14 +401,8 @@ int main() {
                 cout << "Root folder not found." << endl;
             }
              break;
-           
 
         case 7:
-            int main1();
-   
-            break;
-
-        case 8:
             
             cout << "Exiting the program.\n";
             break;
@@ -440,7 +410,7 @@ int main() {
         default:
             cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 8);
+    } while (choice != 7);
 
     return 0;
 } 
