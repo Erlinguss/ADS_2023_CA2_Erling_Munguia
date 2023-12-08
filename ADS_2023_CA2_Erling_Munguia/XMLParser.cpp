@@ -209,7 +209,6 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
     return totalMemory;
 }
 
-
 // =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
@@ -218,7 +217,7 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
         pruneEmptyFolders(childNode);
 
         // ===Check if the folder is empty or if it contains only empty folders ===
-        if (childNode->children.size() == 0 || containsNonEmptyFiles(childNode)) {
+        if (childIter.item()->children.getIterator().isValid() || childIter.item()->data->type != "dir") {
             childIter.advance();
         }
         else {
@@ -235,13 +234,14 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
     DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
     while (childIter.isValid()) {
         File* childData = childIter.item()->getData();
-        if (childData->size > 0) {
+        if (childData->size > 0|| childData->type == "dir") {
             return true;  
         }
         childIter.advance();
     }
     return false;  
 }
+
 
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
@@ -260,7 +260,6 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
        // }
        
     }
-
     DListIterator<Tree<File*>*> childIter = currentNode->children.getIterator();
     while (childIter.isValid()) {
         Tree<File*>* foundNode = findItem(partialName, childIter.item(), newPath);
@@ -299,7 +298,7 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
     }
 }
 
-/*
+
 int main() {
     int choice;
     string xmlFileName;
@@ -406,7 +405,9 @@ int main() {
             
             cout << "Exiting the program.\n";
             break;
-
+        case 8:
+            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
+            break;
         default:
             cout << "Invalid choice. Try again.\n";
         }
@@ -414,5 +415,5 @@ int main() {
 
     return 0;
 } 
-*/
+
 
