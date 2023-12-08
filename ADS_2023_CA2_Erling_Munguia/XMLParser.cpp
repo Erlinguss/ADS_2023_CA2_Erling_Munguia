@@ -219,7 +219,7 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
 
         // ===Check if the folder is empty or if it contains only empty folders ===
         if (childIter.item()->children.getIterator().isValid() || childIter.item()->data->type != "dir") {
-            childIter.advance();
+        childIter.advance();
         }
         else {
             // === Remove the empty folder ===
@@ -228,11 +228,30 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
             childIter = node->children.getIterator();
         }
     }
+}*/
+
+
+
+void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
+    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* childNode = childIter.item();
+        pruneEmptyFolders(childNode);
+
+        // === Check if the folder is empty or if it contains only empty folders ===
+        if (childNode->children.size() == 0 && childNode->data->type == "dir") {
+            // === Remove the empty folder ===
+            childIter = node->children.remove(childIter);
+            delete childNode;
+        }
+        else {
+            childIter.advance();
+        }
+    }
 }
-*/
 
 
-
+/*
 // =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
@@ -251,7 +270,7 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
             childIter = node->children.getIterator();
         }
     }
-}
+} 
 
 // ===== Function to check non empty folders =====
 bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
@@ -265,6 +284,10 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
     }
     return false;
 }
+
+*/
+
+
 
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
@@ -294,6 +317,7 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
     return nullptr;
 }
+
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
     if (folder == nullptr) {
@@ -348,8 +372,8 @@ int main() {
         switch (choice) {
         case 1:
         
-            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
-            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
+            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
 
             xmlParser = XMLParser(xmlFileName); 
             xmlParser.parse();
