@@ -210,7 +210,7 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
 }
 
 
-// =====Task 2c: Function Prune the tree to remove empty folders =====
+/*// =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
@@ -229,21 +229,42 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
         }
     }
 }
+*/
+
+
+
+// =====Task 2c: Function Prune the tree to remove empty folders =====
+void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
+    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* childNode = childIter.item();
+        pruneEmptyFolders(childNode);
+
+        // ===Check if the folder is empty or if it contains only empty folders ===
+        if (childNode->children.size() == 0 || containsNonEmptyFiles(childNode)) {
+            childIter.advance();
+        }
+        else {
+            // === Remove the empty folder ===
+            node->children.remove(childIter);
+            delete childNode;
+            childIter = node->children.getIterator();
+        }
+    }
+}
 
 // ===== Function to check non empty folders =====
 bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
     DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
     while (childIter.isValid()) {
         File* childData = childIter.item()->getData();
-        if (childData->size > 0|| childData->type == "dir") {
-            return true;  
+        if (childData->size > 0) {
+            return true;
         }
         childIter.advance();
     }
-    return false;  
+    return false;
 }
-
-
 
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
