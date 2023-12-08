@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\..\..\OneDrive - Dundalk Institute of Technology\Desktop\Example1.xml" />
+    <Xml Include="File.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

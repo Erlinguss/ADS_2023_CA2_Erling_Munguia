@@ -209,6 +209,7 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
     return totalMemory;
 }
 
+
 // =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
@@ -241,6 +242,7 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
     }
     return false;  
 }
+
 
 
 
@@ -325,7 +327,9 @@ int main() {
         switch (choice) {
         case 1:
         
-            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
+
             xmlParser = XMLParser(xmlFileName); 
             xmlParser.parse();
             break;
