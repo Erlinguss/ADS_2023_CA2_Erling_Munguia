@@ -221,12 +221,11 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
         if (childNode->children.isEmpty() && childNode->data->type == "dir") {
             // === Remove the empty folder ===
             DListIterator<Tree<File*>*> tempIter = childIter;
-            ++tempIter;  
+            ++tempIter;  // Advance the temporary iterator before removing
             delete childNode;
             node->children.remove(childIter);
             childIter = tempIter;
-        }
-        else {
+        } else {
             childIter.advance();
         }
     }
