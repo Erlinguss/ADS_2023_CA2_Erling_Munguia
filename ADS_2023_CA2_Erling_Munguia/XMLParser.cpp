@@ -231,28 +231,35 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
 }*/
 
 
+bool isFolderEmpty(Tree<File*>* folder) {
+    return folder->getChildren().empty();
+}
 
-void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
-    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
-    while (childIter.isValid()) {
-        Tree<File*>* childNode = childIter.item();
-        pruneEmptyFolders(childNode);
+void pruneEmptyFoldersRecursive(Tree<File*>* node) {
+    if (node == nullptr) {
+        return;
+    }
 
-        // === Check if the folder is empty or if it contains only empty folders ===
-        if (childNode->children.size() == 0 && childNode->data->type == "dir") {
-            // === Remove the empty folder ===
-            childIter = node->children.remove(childIter);
-            delete childNode;
+
+    for (auto it = node->getChildren().begin(); it != node->getChildren().end(); ) {
+        pruneEmptyFoldersRecursive(*it);
+        if (isFolderEmpty(*it)) {
+            delete* it;
+            it = node->getChildren().erase(it);
         }
         else {
-            childIter.advance();
+            ++it;
         }
     }
 }
 
+void pruneEmptyFolders(Tree<File*>* root) {
+    pruneEmptyFoldersRecursive(root);
+}
 
-/*
-// =====Task 2c: Function Prune the tree to remove empty folders =====
+
+
+/*// =====Task 2c: Function Prune the tree to remove empty folders =====
 void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
     DListIterator<Tree<File*>*> childIter = node->children.getIterator();
     while (childIter.isValid()) {
@@ -284,11 +291,7 @@ bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
     }
     return false;
 }
-
 */
-
-
-
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
 Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
@@ -407,6 +410,9 @@ int main() {
             else {
                 cout << "Root folder not found.\n";
             }
+            cout << "Tree structure after prune empty folders/files\n";
+            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
+
             break;
         
         case 5:
@@ -454,9 +460,7 @@ int main() {
             
             cout << "Exiting the program.\n";
             break;
-        case 8:
-            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
-            break;
+     
         default:
             cout << "Invalid choice. Try again.\n";
         }
