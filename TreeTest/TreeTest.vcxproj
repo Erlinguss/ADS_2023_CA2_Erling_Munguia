@@ -156,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ADS_2023_CA2_Erling_Munguia\structure.cpp" />
+    <ClCompile Include="..\ADS_2023_CA2_Erling_Munguia\XMLParser.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -164,6 +166,7 @@
     </ClCompile>
     <ClCompile Include="TreetIteratorTest.cpp" />
     <ClCompile Include="TreeTest.cpp" />
+    <ClCompile Include="XMLParserTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

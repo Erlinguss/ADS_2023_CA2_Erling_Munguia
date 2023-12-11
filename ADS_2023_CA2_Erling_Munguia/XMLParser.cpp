@@ -8,7 +8,7 @@
 #include "structure.h"
 #include "TreeIterator.h"
 #include "XMLParser.h"
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 
 using namespace std;
 
@@ -142,7 +142,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                 ++i;
             }
         }
-        delete iter;  // === Release memory for the TreeIterator ===
+        delete iter;  
         return tree;
     }
     catch (const exception& e) {
@@ -252,11 +252,9 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
     if (currentName.find(partialName) != string::npos) {
    
     cout << "Path: " << newPath << endl;
-        
-       // if (currentNode->getData()->type == "dir") {
+
             return currentNode;
-       // }
-       
+ 
     }
     DListIterator<Tree<File*>*> childIter = currentNode->children.getIterator();
     while (childIter.isValid()) {
@@ -271,33 +269,7 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 }
 
 
-/*// ==== Task 2e: Display the contents of a given folder including file sizes ====
-void XMLParser::displayFolderContents(Tree<File*>* folder) const {
-    if (folder == nullptr) {
-        cout << "Invalid folder." << endl;
-        return;
-    }
-
-    cout << "Folder: " << folder->getData()->name << " (Size: " << folder->getData()->size << " bytes)" << endl;
-
-    DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
-    while (childIter.isValid()) {
-        Tree<File*>* childNode = childIter.item();
-        File* childData = childNode->getData();
-
-        cout << "Child: " << childData->name << " (Type: " << childData->type << ", Size: " << childData->size << " bytes)" << endl;
-
-        if (childData->type == "file") {
-            cout << "File: " << childData->name << " (Size: " << childData->size << " bytes)" << endl;
-        } 
-        else if (childData->type == "dir") {
-            // === Recursive call for subfolders ===
-            displayFolderContents(childNode);
-        }
-        childIter.advance();
-    }
-}*/
-
+// ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
     if (folder == nullptr) {
         cout << "Invalid folder." << endl;
@@ -311,7 +283,6 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
 
     cout << endl; 
 }
-
 
 
 int main() {
