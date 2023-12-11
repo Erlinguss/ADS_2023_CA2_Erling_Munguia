@@ -108,6 +108,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                     }
                     else if (tag == "dir") {
                         currentFile = new File();
+                        currentFile->type = "dir";
                         if (iter == nullptr) {
                             tree = new Tree<File*>(currentFile);
                             iter = new TreeIterator<File*>(tree);
@@ -210,38 +211,33 @@ int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
 }
 
 
-// Helper function to check if a folder is empty
-bool isFolderEmpty(Tree<File*>* folder) {
-    return folder->getChildren().empty();
-}
-
-// Recursive function to prune empty folders using post-order traversal
-void XMLParser::pruneEmptyFoldersRecursive(Tree<File*>* node) {
-    if (node == nullptr) {
-        return;
+// =====Task 2c: Function Prune the tree to remove empty folders =====
+void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
+    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
+    while (childIter.isValid()) {
+        Tree<File*>* childNode = childIter.item();
+        childIter.advance();
+        pruneEmptyFolders(childNode);
+        
     }
+        // ===Check if the folder is empty or if it contains only empty folders ===
+        if (!node->children.getIterator().isValid() && node->data->type == "dir")
+        {
+            // === Remove the empty folder ===
+            DListIterator<Tree<File*>*> parentIter = node->parent->children.getIterator();
+            while (parentIter.currentNode->data != node && parentIter.isValid())
+            {
+                parentIter.advance();
+            }
+            if (parentIter.isValid())
+            {
+                delete node->data;
+                parentIter = node->parent->children.remove(parentIter);
 
-    // Recursively prune children first
-    for (auto it = node->getChildren().begin(); it != node->getChildren().end(); ++it) {
-        pruneEmptyFoldersRecursive(*it);
-    }
-
-    // Remove empty folders
-    node->getChildren().remove_if([](Tree<File*>* child) {
-        if (isFolderEmpty(child)) {
-            delete child;
-            return true; // Remove empty folder
+            }
         }
-        return false; // Keep non-empty folder
-        });
+    
 }
-
-// Wrapper function to initiate pruning from the root
-void XMLParser::pruneEmptyFolders(Tree<File*>* root) {
-    pruneEmptyFoldersRecursive(root);
-}
-
-
 
 
 /*// =====Task 2c: Function Prune the tree to remove empty folders =====
@@ -360,8 +356,8 @@ int main() {
         switch (choice) {
         case 1:
         
-            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
-            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
+            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
 
             xmlParser = XMLParser(xmlFileName); 
             xmlParser.parse();
@@ -395,8 +391,6 @@ int main() {
             else {
                 cout << "Root folder not found.\n";
             }
-            cout << "Tree structure after prune empty folders/files\n";
-            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
 
             break;
         
@@ -444,6 +438,11 @@ int main() {
         case 7:
             
             cout << "Exiting the program.\n";
+            break;
+
+        case 8:
+
+            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
             break;
      
         default:
