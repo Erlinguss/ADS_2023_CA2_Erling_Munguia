@@ -271,7 +271,7 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 }
 
 
-// ==== Task 2e: Display the contents of a given folder including file sizes ====
+/*// ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
     if (folder == nullptr) {
         cout << "Invalid folder." << endl;
@@ -296,7 +296,22 @@ void XMLParser::displayFolderContents(Tree<File*>* folder) const {
         }
         childIter.advance();
     }
+}*/
+
+void XMLParser::displayFolderContents(Tree<File*>* folder) const {
+    if (folder == nullptr) {
+        cout << "Invalid folder." << endl;
+        return;
+    }
+
+    cout << "Folder: " << folder->getData()->name << " (Size: " << folder->getData()->size << " bytes)" << endl;
+
+    TreeIterator<File*> folderIter(folder);
+    displayTree(folderIter, "");
+
+    cout << endl; 
 }
+
 
 
 int main() {
