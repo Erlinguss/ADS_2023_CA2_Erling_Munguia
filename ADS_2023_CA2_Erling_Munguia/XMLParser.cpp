@@ -33,7 +33,6 @@ bool XMLParser::validateXML(const string& xmlDocument) {
             }
 
             if (tag[0] == '/') {
-                //if (tagStack.empty() || tag.substr(1) != tagStack.top()) {
                 if (tagStack.empty() || tag.compare(1, string::npos, tagStack.top()) != 0) {
                     return false;
                 }
@@ -109,6 +108,7 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
                     else if (tag == "dir") {
                         currentFile = new File();
                         currentFile->type = "dir";
+
                         if (iter == nullptr) {
                             tree = new Tree<File*>(currentFile);
                             iter = new TreeIterator<File*>(tree);
@@ -151,13 +151,16 @@ Tree<File*>* XMLParser::builtTree(const string& xmlDocument) {
     }
 }
 
+
 // ========== Method set the Root ===============
 void XMLParser::setRoot(Tree<File*>* newRoot) {
     root = newRoot;
 }
 
+
 XMLParser::XMLParser(const string& xmlFileName) : xmlFileName(xmlFileName),
 root(nullptr) {}
+
 
 
 // ========= Function to parse the Tree =========
@@ -184,6 +187,7 @@ void XMLParser::parse() {
     }
 
 }
+
 
 //=== Task 2b. Function to calculate the memory usage BFS ===
 int XMLParser::memoryUsageBFS(Tree<File*>* folder) const {
@@ -236,43 +240,8 @@ void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
 
             }
         }
-    
 }
 
-
-/*// =====Task 2c: Function Prune the tree to remove empty folders =====
-void XMLParser::pruneEmptyFolders(Tree<File*>* node) {
-    DListIterator<Tree<File*>*> childIter = node->children.getIterator();
-    while (childIter.isValid()) {
-        Tree<File*>* childNode = childIter.item();
-        pruneEmptyFolders(childNode);
-
-        // ===Check if the folder is empty or if it contains only empty folders ===
-        if (childNode->children.size() == 0 || containsNonEmptyFiles(childNode)) {
-            childIter.advance();
-        }
-        else {
-            // === Remove the empty folder ===
-            node->children.remove(childIter);
-            delete childNode;
-            childIter = node->children.getIterator();
-        }
-    }
-} 
-
-// ===== Function to check non empty folders =====
-bool XMLParser::containsNonEmptyFiles(Tree<File*>* folder) {
-    DListIterator<Tree<File*>*> childIter = folder->children.getIterator();
-    while (childIter.isValid()) {
-        File* childData = childIter.item()->getData();
-        if (childData->size > 0) {
-            return true;
-        }
-        childIter.advance();
-    }
-    return false;
-}
-*/
 
 // ===== Task 2d: Find a given folder using Depth First Search ======
 Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* currentNode, string currentPath) {
@@ -280,7 +249,6 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
     string newPath = currentPath + "/" + currentName;
    
   
-
     if (currentName.find(partialName) != string::npos) {
    
     cout << "Path: " << newPath << endl;
@@ -301,6 +269,7 @@ Tree<File*>* XMLParser::findItem(const string& partialName, Tree<File*>* current
 
     return nullptr;
 }
+
 
 // ==== Task 2e: Display the contents of a given folder including file sizes ====
 void XMLParser::displayFolderContents(Tree<File*>* folder) const {
@@ -356,8 +325,8 @@ int main() {
         switch (choice) {
         case 1:
         
-            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
-            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
+            xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/Example1.xml";
+            //xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia/ADS_2023_CA2_Erling_Munguia/File.xml";
 
             xmlParser = XMLParser(xmlFileName); 
             xmlParser.parse();
@@ -365,7 +334,7 @@ int main() {
         
         case 2:
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Number of items (File/Folder): " << xmlParser.getRoot()->count() << endl;
+                cout << "\nNumber of items (File/Folder): " << xmlParser.getRoot()->count() << endl;
             }
             else {
                 cout << "Root folder not found.\n";
@@ -375,7 +344,7 @@ int main() {
         
         case 3:
              if (xmlParser.getRoot() != nullptr) {
-               cout << "Memory used by the folder: " << xmlParser.memoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
+               cout << "\nMemory used by the folder: " << xmlParser.memoryUsageBFS(xmlParser.getRoot()) << " bytes\n";
             }
             else {
                 cout << "Root folder not found.\n";
@@ -384,13 +353,17 @@ int main() {
       
         case 4:
             if (xmlParser.getRoot() != nullptr) {
-                cout << "Pruning the tree to remove empty folders\n";
+                cout << "\nPruning the tree to remove empty folders\n";
                 xmlParser.pruneEmptyFolders(xmlParser.getRoot());
                 cout << "Tree pruned successfully.\n";
             }
             else {
                 cout << "Root folder not found.\n";
             }
+
+
+            cout << "\nTree Structure Updated:\n\n";
+            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
 
             break;
         
@@ -440,10 +413,6 @@ int main() {
             cout << "Exiting the program.\n";
             break;
 
-        case 8:
-
-            displayTree(TreeIterator<File*>(xmlParser.getRoot()), "");
-            break;
      
         default:
             cout << "Invalid choice. Try again.\n";

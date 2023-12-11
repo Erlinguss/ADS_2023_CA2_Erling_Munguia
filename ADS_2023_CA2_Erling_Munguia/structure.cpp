@@ -3,5 +3,7 @@
 
 ostream& operator<<(ostream& out, File*& f)
 {
-    return out << f->name << "(" << f->size << ")" << f->type;
+    if(f->type!= "dir")
+        return out << f->name << "(" << f->size << ")" << f->type;
+    return out << f->name ;
 }
