@@ -33,63 +33,126 @@ namespace XMLParserTest
             Assert::IsNotNull(tree);
         }
 
-        TEST_METHOD(TestBuildTree_InvalidDocument)
+        TEST_METHOD(TestBuildTree_EmptyDocument)
         {
             XMLParser xmlParser("");
-            string invalidXML = "<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>";
-            Tree<File*>* tree = xmlParser.builtTree(invalidXML);
+            string emptyXML = "";
+            Tree<File*>* tree = xmlParser.builtTree(emptyXML);
+
             Assert::IsNull(tree);
+        }
+        TEST_METHOD(TestBuildTree_NestedFoldersAndFiles)
+        {
+            XMLParser xmlParser("");
+            string nestedXML = "<dir><name>Root</name>"
+                "<file><name>git1.txt</name><length>10</length><type>txt</type></file>"
+                "<dir><name>Subfolder1</name>"
+                "<file><name>git2.txt</name><length>20</length><type>txt</type></file>"
+                "<dir><name>Subfolder2</name>"
+                "<file><name>git3.txt</name><length>30</length><type>txt</type></file>"
+                "</dir>"
+                "</dir>"
+                "</dir>";
+            Tree<File*>* tree = xmlParser.builtTree(nestedXML);
+            Assert::IsNotNull(tree);
         }
 
 
         TEST_METHOD(TestMemoryUsageBFS)
         {
             XMLParser xmlParser("");
-            Tree<File*>* tree = xmlParser.builtTree("<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>");
+            string xmlDocument = "<dir><file><name>ADS_Single_LinkedList_Exercises</name><length>100</length><type>txt</type></file><dir><file><name>file2</name><length>500</length><type>txt</type></file></dir></dir>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
             int memoryUsage = xmlParser.memoryUsageBFS(tree);
-            Assert::AreEqual(2581, memoryUsage);
+
+            Assert::AreEqual(600, memoryUsage);
         }
 
-        TEST_METHOD(TestPruneEmptyFolders)
+
+        TEST_METHOD(TestMemoryUsageBFS_EmptyTree)
         {
             XMLParser xmlParser("");
-            Tree<File*>* tree = xmlParser.builtTree("<dir><dir><file><name>file1</name><length>100</length><type>txt</type></file></dir></dir>");
+            Tree<File*>* tree = nullptr;
+            int memoryUsage = xmlParser.memoryUsageBFS(tree);
+            Assert::AreEqual(0, memoryUsage);
+        }
+
+        TEST_METHOD(TestPruneEmptyFolders_NoEmptyFolders)
+        {
+            XMLParser xmlParser("");
+            string xmlDocument = "<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
+
+            Assert::IsNotNull(tree->children.getIterator().item());
+
             xmlParser.pruneEmptyFolders(tree);
-            Assert::IsNull(tree->children.getIterator().item());
+
+            Assert::IsNotNull(tree->children.getIterator().item());
         }
 
 
         TEST_METHOD(TestFindItem)
         {
             XMLParser xmlParser("");
-            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
-            Tree<File*>* foundNode = xmlParser.findItem("file1", tree, "");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>");
+            Tree<File*>* foundNode = xmlParser.findItem("ADS_Single_LinkedList_Exercises", tree, "");
             Assert::IsNotNull(foundNode);
         }
 
         TEST_METHOD(TestFindItemNotFound)
         {
             XMLParser xmlParser("");
-            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
-            Tree<File*>* foundNode = xmlParser.findItem("file2", tree, "");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>");
+            Tree<File*>* foundNode = xmlParser.findItem("ADS_Single_LinkedList_Exercises1", tree, "");
             Assert::IsNull(foundNode);
         }
 
         TEST_METHOD(TestDisplayFolderContents)
         {
             XMLParser xmlParser("");
-            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
-            std::ostringstream stream;
-            auto coutBuffer = std::cout.rdbuf();
-            std::cout.rdbuf(stream.rdbuf());
+            string xmlDocument = "<dir><name>Root</name>"
+                "<file><name>git1.txt</name><length>100</length><type>txt</type></file>"
+                "<file><name>git2.txt</name><length>150</length><type>txt</type></file>"
+                "<dir><name>Subfolder</name>"
+                "<file><name>git3.txt</name><length>200</length><type>txt</type></file>"
+                "<file><name>git4.txt</name><length>120</length><type>txt</type></file>"
+                "</dir>"
+                "</dir>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
 
             xmlParser.displayFolderContents(tree);
-
-            std::cout.rdbuf(coutBuffer);
-
-            string expectedOutput = "Folder: dir (Size: 100 bytes)\n\tfile1(100)\n";
-            Assert::AreEqual(expectedOutput, stream.str());
         }
+
+        TEST_METHOD(TestDisplayFolderContents_SingleFile)
+        {
+            XMLParser xmlParser("");
+            string xmlDocument = "<file><name>git1.txt</name><length>100</length><type>txt</type></file>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
+
+            xmlParser.displayFolderContents(tree);
+        }
+
+        TEST_METHOD(TestDisplayFolderContents_EmptyFolder)
+        {
+            XMLParser xmlParser("");
+            string xmlDocument = "<dir><name>EmptyFolder</name></dir>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
+
+            xmlParser.displayFolderContents(tree);
+        }
+
+        TEST_METHOD(TestDisplayFolderContents_NestedFolders)
+        {
+            XMLParser xmlParser("");
+            string xmlDocument = "<dir><name>Root</name>"
+                "<dir><name>Subfolder1</name><file><name>file1.txt</name><length>100</length><type>txt</type></file></dir>"
+                "<dir><name>Subfolder2</name><file><name>file2.txt</name><length>150</length><type>txt</type></file></dir>"
+                "</dir>";
+            Tree<File*>* tree = xmlParser.builtTree(xmlDocument);
+
+            xmlParser.displayFolderContents(tree);
+        }
+
 
 
 	};

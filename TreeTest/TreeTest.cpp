@@ -41,7 +41,7 @@ namespace TreeTest
 		TEST_METHOD(TestEmptyTree)
 		{
 			Tree<int> emptyTree(0);
-			Assert::AreEqual(1, emptyTree.count()); 
+			Assert::AreEqual(1, emptyTree.count());
 			Assert::IsNull(emptyTree.parent);
 			Assert::AreEqual(0, emptyTree.children.size());
 		}
@@ -57,13 +57,38 @@ namespace TreeTest
 			childTwo.children.append(&subChild);
 			tree.children.append(&childOne);
 			tree.children.append(&childTwo);
-			Assert::AreEqual(5, tree.count()); 
+			Assert::AreEqual(5, tree.count());
 		}
 
 		TEST_METHOD(TestDataRetrieval)
 		{
 			Tree<std::string> stringTree("Root");
 			Assert::AreEqual(std::string("Root"), stringTree.getData());
+		}
+
+		TEST_METHOD(TestGetRootSingleItem)
+		{
+			Tree<int> singleItem(1);
+			Tree<int>* singleItemRoot = singleItem.getRoot();
+
+			Assert::IsNotNull(singleItemRoot);
+			Assert::AreEqual(1, singleItemRoot->data);
+		}
+
+		TEST_METHOD(TestGetParentNull)
+		{
+			Tree<int> singleItem(1);
+
+			Tree<int>* singleItemParent = singleItem.parent;
+
+			Assert::IsNull(singleItemParent);
+		}
+
+		TEST_METHOD(TestGetDataWithNonIntegerType)
+		{
+			Tree<std::string> root("Root");
+
+			Assert::AreEqual(std::string("Root"), root.getData());
 		}
 
 	};
