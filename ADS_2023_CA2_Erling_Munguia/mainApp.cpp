@@ -16,11 +16,28 @@ const int ButtonHeight = 40;
 
 sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Data Structure Management");
 
-void drawText(sf::RenderWindow& window, const std::string& text, float x, float y, float scaleFactor) {
+void drawText(sf::RenderWindow& window, const File& file, float x, float y, float scaleFactor, int depth, const std::string& currentDir) {
     sf::Font font;
     if (!font.loadFromFile("C:/going-to-do-great-things/goingtodogreatthings.ttf")) {
         std::cout << "Error loading font!\n";
         return;
+    }
+
+    std::string indentation = std::string(depth * 4, ' ');
+    std::string text;
+
+    if (file.type == "dir") {
+
+        text = indentation + "[" + file.name + "]";
+    }
+    else {
+
+        if (!currentDir.empty()) {
+            text = indentation + file.name + "(" + std::to_string(file.size) + " " + file.type + ")";
+        }
+        else {
+            text = indentation + file.name;
+        }
     }
 
     sf::Text sfText(text, font, 20 * scaleFactor);
@@ -29,23 +46,30 @@ void drawText(sf::RenderWindow& window, const std::string& text, float x, float 
     window.draw(sfText);
 }
 
-void drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float x, float y, float yOffset, float scaleFactor) {
-    if (root != nullptr) {
-        drawText(window, root->getData()->name, x, y, scaleFactor);
 
-        float childX = x;
+float drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float x, float y, float yOffset, float scaleFactor, int depth = 0, const std::string& currentDir = "") {
+    if (root != nullptr) {
+        float adjustedX = x + depth * 20 * scaleFactor;
+
+        std::string currentPath = currentDir + "/" + root->getData()->name;
+
+        drawText(window, *(root->getData()), adjustedX, y, scaleFactor, depth, currentPath);
+
         float childY = y + yOffset * scaleFactor;
 
         DListIterator<Tree<File*>*> childIter = root->children.getIterator();
         while (childIter.isValid()) {
-            drawTreeLabelsRecursive(window, childIter.item(), childX, childY, yOffset, scaleFactor);
-
-
+            childY = drawTreeLabelsRecursive(window, childIter.item(), adjustedX, childY, yOffset, scaleFactor, depth + 1, currentPath);
             childY += 30 * scaleFactor;
             childIter.advance();
         }
+
+        return childY;
     }
+
+    return y;
 }
+
 
 void drawGUI() {
     window.clear(sf::Color::White);
@@ -115,8 +139,7 @@ int main() {
     while (window.isOpen()) {
         handleEvent(xmlParser);
         drawGUI();
-        drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 4, 100, 20, scaleFactor);
-
+        float finalY = drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 30, 300, 20, scaleFactor);
         window.display();
     }
 
