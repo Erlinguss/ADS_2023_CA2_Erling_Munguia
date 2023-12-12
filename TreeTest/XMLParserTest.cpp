@@ -32,6 +32,35 @@ namespace XMLParserTest
             Tree<File*>* tree = xmlParser.builtTree(validXML);
             Assert::IsNotNull(tree);
         }
+
+        TEST_METHOD(TestBuildTree_InvalidDocument)
+        {
+            XMLParser xmlParser("");
+            string invalidXML = "<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>";
+            Tree<File*>* tree = xmlParser.builtTree(invalidXML);
+            Assert::IsNull(tree);
+        }
+
+
+        TEST_METHOD(TestMemoryUsageBFS)
+        {
+            XMLParser xmlParser("");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><name>ADS_Single_LinkedList_Exercises</name><file><name>.gitattributes</name><length>2581 b</length><type>gitattributes</type></file></dir>");
+            int memoryUsage = xmlParser.memoryUsageBFS(tree);
+            Assert::AreEqual(2581, memoryUsage);
+        }
+
+        TEST_METHOD(TestPruneEmptyFolders)
+        {
+            XMLParser xmlParser("");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><dir><file><name>file1</name><length>100</length><type>txt</type></file></dir></dir>");
+            xmlParser.pruneEmptyFolders(tree);
+            Assert::IsNull(tree->children.getIterator().item());
+        }
+
+
+
+
 	};
 }
 
