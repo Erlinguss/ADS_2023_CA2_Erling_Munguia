@@ -13,6 +13,7 @@ const int WindowWidth = 1800;
 const int WindowHeight = 1200;
 const int ButtonWidth = 150;
 const int ButtonHeight = 40;
+const float ScrollSpeed = 100.0f;
 
 sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Data Structure Management");
 
@@ -23,15 +24,13 @@ void drawText(sf::RenderWindow& window, const File& file, float x, float y, floa
         return;
     }
 
-    std::string indentation = std::string(depth * 4, ' ');
+    std::string indentation = std::string(depth * 2, ' ');
     std::string text;
 
     if (file.type == "dir") {
-
         text = indentation + "[" + file.name + "]";
     }
     else {
-
         if (!currentDir.empty()) {
             text = indentation + file.name + "(" + std::to_string(file.size) + " " + file.type + ")";
         }
@@ -40,16 +39,15 @@ void drawText(sf::RenderWindow& window, const File& file, float x, float y, floa
         }
     }
 
-    sf::Text sfText(text, font, 20 * scaleFactor);
+    sf::Text sfText(text, font, 14 * scaleFactor);
     sfText.setPosition(x, y);
     sfText.setFillColor(sf::Color::Black);
     window.draw(sfText);
 }
 
-
 float drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float x, float y, float yOffset, float scaleFactor, int depth = 0, const std::string& currentDir = "") {
     if (root != nullptr) {
-        float adjustedX = x + depth * 20 * scaleFactor;
+        float adjustedX = x + depth * 10 * scaleFactor;
 
         std::string currentPath = currentDir + "/" + root->getData()->name;
 
@@ -60,7 +58,7 @@ float drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float
         DListIterator<Tree<File*>*> childIter = root->children.getIterator();
         while (childIter.isValid()) {
             childY = drawTreeLabelsRecursive(window, childIter.item(), adjustedX, childY, yOffset, scaleFactor, depth + 1, currentPath);
-            childY += 30 * scaleFactor;
+            childY += 10 * scaleFactor;
             childIter.advance();
         }
 
@@ -69,7 +67,6 @@ float drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float
 
     return y;
 }
-
 
 void drawGUI() {
     window.clear(sf::Color::White);
@@ -87,7 +84,7 @@ void drawGUI() {
     window.draw(button2);
 }
 
-bool handleEvent(XMLParser& xmlParser) {
+bool handleEvent(XMLParser& xmlParser, float& yOffset) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -106,7 +103,7 @@ bool handleEvent(XMLParser& xmlParser) {
                     std::cout << "Button 1 Clicked!\n" << std::endl;
 
                     // ===== validate XML, build and display the tree labels ======
-                    std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia_Urbina/ADS_2023_CA2_Erling_Munguia_Urbina/File.xml";
+                    std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia_Urbina/ADS_2023_CA2_Erling_Munguia_Urbina/Example1.xml";
 
                     xmlParser = XMLParser(xmlFileName);
                     xmlParser.parse();
@@ -125,6 +122,13 @@ bool handleEvent(XMLParser& xmlParser) {
                 }
             }
         }
+
+        // ==========Scroll functionality============
+        if (event.type == sf::Event::MouseWheelScrolled) {
+            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+                yOffset -= event.mouseWheelScroll.delta * ScrollSpeed;
+            }
+        }
     }
 
     return true;
@@ -134,12 +138,13 @@ int main() {
     std::string xmlFileName;
     XMLParser xmlParser("");
 
-    float scaleFactor = 3.0f;
+    float scaleFactor = 2.0f;
+    float yOffset = 0.0f;
 
     while (window.isOpen()) {
-        handleEvent(xmlParser);
+        handleEvent(xmlParser, yOffset);
         drawGUI();
-        float finalY = drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 30, 300, 20, scaleFactor);
+        float finalY = drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 30, 300 + yOffset, 20, scaleFactor);
         window.display();
     }
 
