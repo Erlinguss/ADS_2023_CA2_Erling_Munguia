@@ -59,6 +59,37 @@ namespace XMLParserTest
         }
 
 
+        TEST_METHOD(TestFindItem)
+        {
+            XMLParser xmlParser("");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
+            Tree<File*>* foundNode = xmlParser.findItem("file1", tree, "");
+            Assert::IsNotNull(foundNode);
+        }
+
+        TEST_METHOD(TestFindItemNotFound)
+        {
+            XMLParser xmlParser("");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
+            Tree<File*>* foundNode = xmlParser.findItem("file2", tree, "");
+            Assert::IsNull(foundNode);
+        }
+
+        TEST_METHOD(TestDisplayFolderContents)
+        {
+            XMLParser xmlParser("");
+            Tree<File*>* tree = xmlParser.builtTree("<dir><file><name>file1</name><length>100</length><type>txt</type></file></dir>");
+            std::ostringstream stream;
+            auto coutBuffer = std::cout.rdbuf();
+            std::cout.rdbuf(stream.rdbuf());
+
+            xmlParser.displayFolderContents(tree);
+
+            std::cout.rdbuf(coutBuffer);
+
+            string expectedOutput = "Folder: dir (Size: 100 bytes)\n\tfile1(100)\n";
+            Assert::AreEqual(expectedOutput, stream.str());
+        }
 
 
 	};
