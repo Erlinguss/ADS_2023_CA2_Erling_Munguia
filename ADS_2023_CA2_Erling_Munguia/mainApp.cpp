@@ -1,4 +1,3 @@
-
 #include "DList.h"
 #include "DListIterator.h"
 #include "Tree.h"
@@ -102,6 +101,17 @@ void drawBottoms() {
     title4.setPosition(10 + (BottomWidth - title4.getLocalBounds().width) / 2, 180 + (BottomHeight - title4.getLocalBounds().height) / 2);
     title4.setFillColor(sf::Color::Black);
     window.draw(title4);
+
+    sf::RectangleShape bottom5(sf::Vector2f(BottomWidth, BottomHeight));
+    bottom5.setFillColor(sf::Color::Red);
+    bottom5.setPosition(10, 300);
+    window.draw(bottom5);
+
+    sf::Text title5("Close", font, 25);
+    title5.setPosition(10 + (BottomWidth - title5.getLocalBounds().width) / 2, 300 + (BottomHeight - title5.getLocalBounds().height) / 2);
+    title5.setFillColor(sf::Color::Black);
+    window.draw(title5);
+
 }
 
 
@@ -138,7 +148,6 @@ void drawSearchBox(sf::RenderWindow& window, sf::Text& searchInput, sf::Rectangl
 }
 
 
-//bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDisplay, bool& isFirstBottomClicked) { 
 bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDisplay, bool& isFirstBottomClicked, bool& isSearchActive, sf::Text& searchInput, sf::RectangleShape& searchBox) {
 
     sf::Event event;
@@ -157,6 +166,7 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                 sf::FloatRect bottomBounds2(10, 60, BottomWidth, BottomHeight);
                 sf::FloatRect bottomBounds3(10, 120, BottomWidth, BottomHeight);
                 sf::FloatRect bottomBounds4(10, 180, BottomWidth, BottomHeight);
+                sf::FloatRect bottomBounds5(10, 300, BottomWidth, BottomHeight);
 
                 if (bottomBounds1.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia_Urbina/ADS_2023_CA2_Erling_Munguia_Urbina/Example1.xml";
@@ -206,21 +216,20 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                 else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter && isSearchActive) {
                     std::string itemName = searchInput.getString().toAnsiString();
 
-                    if (xmlParser.getRoot() != nullptr) {
-                        Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
+                    Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
 
-                        if (foundNode != nullptr) {
-                            //string fullPath = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
-                            //infoToDisplay = "File/Folder found: " + fullPath;
-                        }
-                        else {
-                            std::cout << "File/Folder not found." << std::endl;
-                            infoToDisplay = "File/Folder not found.";
-                        }
-
-                        searchInput.setString("");
-                        isSearchActive = false;
+                    if (foundNode != nullptr) {
+                        std::cout << "File/Folder found: " << foundNode->getData()->name << std::endl;
+                        infoToDisplay = "File/Folder found: " + foundNode->getData()->name;
                     }
+                    else {
+                        std::cout << "File/Folder not found." << std::endl;
+                        infoToDisplay = "File/Folder not found.";
+                    }
+
+
+                    searchInput.setString("");
+                    isSearchActive = false;
                 }
                 else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter && isSearchActive) {
 
@@ -230,7 +239,7 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                         Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
 
                         if (foundNode != nullptr) {
-                            // string fullPath = xmlParser.getFullPath(foundNode);
+                            //string fullPath =  xmlParser.displayFolderContents(foundNode);
                             // infoToDisplay = "File/Folder found: " + fullPath;
                         }
                         else {
@@ -242,6 +251,10 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                         searchInput.setString("");
                         isSearchActive = false;
                     }
+                }
+                else if (bottomBounds5.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    std::cout << "Close Button Clicked!\n" << std::endl;
+                    window.close();
                 }
 
 
@@ -284,6 +297,7 @@ int main() {
     float yOffset = 0.0f;
 
     bool isSearchActive = false;
+
     sf::Text searchInput("", font, 14 * scaleFactor);
     searchInput.setPosition(10, 240);
     searchInput.setFillColor(sf::Color::Black);
@@ -294,8 +308,6 @@ int main() {
 
     while (window.isOpen()) {
         if (!handleEvent(xmlParser, yOffset, infoToDisplay, isFirstBottomClicked, isSearchActive, searchInput, searchBox)) {
-            // if (!handleEvent(xmlParser, yOffset, infoToDisplay, isFirstBottomClicked)) {
-
             break;
         }
 
@@ -309,10 +321,16 @@ int main() {
 
         drawInfo(infoToDisplay, 300, 100, scaleFactor, !isFirstBottomClicked);
 
-        drawSearchBox(window, searchInput, searchBox, isSearchActive);
+        window.draw(searchBox);
+        window.draw(searchInput);
 
         window.display();
     }
 
     return 0;
 }
+
+
+
+
+
