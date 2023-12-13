@@ -11,7 +11,7 @@
 
 const int WindowWidth = 1800;
 const int WindowHeight = 1200;
-const int BottomWidth = 150;
+const int BottomWidth = 170;
 const int BottomHeight = 40;
 const float ScrollSpeed = 100.0f;
 
@@ -28,7 +28,7 @@ void drawText(sf::RenderWindow& window, const File& file, float x, float y, floa
         text = indentation + "[" + file.name + "]";
     }
     else {
-        text = indentation + file.name + (!currentDir.empty() ? "(" + std::to_string(file.size) + " " + file.type + ")" : "");
+        text = indentation + file.name + (!currentDir.empty() ? "(" + std::to_string(file.size) + ")" + file.type + " " : "");
     }
 
     sf::Text sfText(text, font, 14 * scaleFactor);
@@ -64,19 +64,44 @@ float drawTreeLabelsRecursive(sf::RenderWindow& window, Tree<File*>* root, float
 
 void drawBottoms() {
     sf::RectangleShape bottom1(sf::Vector2f(BottomWidth, BottomHeight));
-    bottom1.setFillColor(sf::Color::Cyan);
+    bottom1.setFillColor(sf::Color::Green);
     bottom1.setPosition(10, 10);
     window.draw(bottom1);
 
+    sf::Text title1("Data Structure", font, 25);
+    title1.setPosition(10 + (BottomWidth - title1.getLocalBounds().width) / 2, 10 + (BottomHeight - title1.getLocalBounds().height) / 2);
+    title1.setFillColor(sf::Color::Black);
+    window.draw(title1);
+
     sf::RectangleShape bottom2(sf::Vector2f(BottomWidth, BottomHeight));
-    bottom2.setFillColor(sf::Color::Cyan);
+    bottom2.setFillColor(sf::Color::Green);
     bottom2.setPosition(10, 60);
     window.draw(bottom2);
 
+    sf::Text title2("Number of Folders", font, 25);
+    title2.setPosition(10 + (BottomWidth - title2.getLocalBounds().width) / 2, 60 + (BottomHeight - title2.getLocalBounds().height) / 2);
+    title2.setFillColor(sf::Color::Black);
+    window.draw(title2);
+
     sf::RectangleShape bottom3(sf::Vector2f(BottomWidth, BottomHeight));
-    bottom3.setFillColor(sf::Color::Cyan);
+    bottom3.setFillColor(sf::Color::Green);
     bottom3.setPosition(10, 120);
     window.draw(bottom3);
+
+    sf::Text title3("Memory Usage", font, 25);
+    title3.setPosition(10 + (BottomWidth - title3.getLocalBounds().width) / 2, 120 + (BottomHeight - title3.getLocalBounds().height) / 2);
+    title3.setFillColor(sf::Color::Black);
+    window.draw(title3);
+
+    sf::RectangleShape bottom4(sf::Vector2f(BottomWidth, BottomHeight));
+    bottom4.setFillColor(sf::Color::Green);
+    bottom4.setPosition(10, 180);
+    window.draw(bottom4);
+
+    sf::Text title4("Prune Empty folders", font, 25);
+    title4.setPosition(10 + (BottomWidth - title4.getLocalBounds().width) / 2, 180 + (BottomHeight - title4.getLocalBounds().height) / 2);
+    title4.setFillColor(sf::Color::Black);
+    window.draw(title4);
 }
 
 
@@ -84,6 +109,7 @@ void drawInfo(const std::string& info, float x, float y, float scaleFactor, bool
     static std::string infoBottom1;
     static std::string infoBottom2;
     static std::string infoBottom3;
+    static std::string infoBottom4;
 
     if (isFirstBottomClicked) {
         infoBottom1 = info;
@@ -104,8 +130,17 @@ void drawInfo(const std::string& info, float x, float y, float scaleFactor, bool
     }
 }
 
+void drawSearchBox(sf::RenderWindow& window, sf::Text& searchInput, sf::RectangleShape& searchBox, bool isSearchActive) {
+    if (isSearchActive) {
+        window.draw(searchBox);
+        window.draw(searchInput);
+    }
+}
 
-bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDisplay, bool& isFirstBottomClicked) {
+
+//bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDisplay, bool& isFirstBottomClicked) { 
+bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDisplay, bool& isFirstBottomClicked, bool& isSearchActive, sf::Text& searchInput, sf::RectangleShape& searchBox) {
+
     sf::Event event;
 
     while (window.pollEvent(event)) {
@@ -120,13 +155,14 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
 
                 sf::FloatRect bottomBounds1(10, 10, BottomWidth, BottomHeight);
                 sf::FloatRect bottomBounds2(10, 60, BottomWidth, BottomHeight);
-                sf::FloatRect bottomBounds3(10, 110, BottomWidth, BottomHeight);
+                sf::FloatRect bottomBounds3(10, 120, BottomWidth, BottomHeight);
+                sf::FloatRect bottomBounds4(10, 180, BottomWidth, BottomHeight);
 
                 if (bottomBounds1.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     std::string xmlFileName = "C:/Users/User/source/repos/ADS_2023_CA2_Erling_Munguia_Urbina/ADS_2023_CA2_Erling_Munguia_Urbina/Example1.xml";
                     xmlParser = XMLParser(xmlFileName);
                     xmlParser.parse();
-                    infoToDisplay = "Data Structure from XMl file";
+                    infoToDisplay = "Data Structure from XML file";
                     isFirstBottomClicked = true;
                 }
                 else if (bottomBounds2.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
@@ -141,6 +177,7 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                     }
                     isFirstBottomClicked = false;
                 }
+
                 else if (bottomBounds3.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     if (xmlParser.getRoot() != nullptr) {
                         int memory = xmlParser.memoryUsageBFS(xmlParser.getRoot());
@@ -153,10 +190,69 @@ bool handleEvent(XMLParser& xmlParser, float& yOffset, std::string& infoToDispla
                     }
                     isFirstBottomClicked = false;
                 }
+
+                else if (bottomBounds4.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+
+                    if (xmlParser.getRoot() != nullptr) {
+                        std::cout << "Pruning the tree to remove empty folders\n";
+                        xmlParser.pruneEmptyFolders(xmlParser.getRoot());
+
+                        infoToDisplay = "Pruning the tree to remove empty folders. Check number of folders.";
+                    }
+                    else {
+                        std::cout << "Root folder not found.\n";
+                    }
+                }
+                else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter && isSearchActive) {
+                    std::string itemName = searchInput.getString().toAnsiString();
+
+                    if (xmlParser.getRoot() != nullptr) {
+                        Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
+
+                        if (foundNode != nullptr) {
+                            //string fullPath = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
+                            //infoToDisplay = "File/Folder found: " + fullPath;
+                        }
+                        else {
+                            std::cout << "File/Folder not found." << std::endl;
+                            infoToDisplay = "File/Folder not found.";
+                        }
+
+                        searchInput.setString("");
+                        isSearchActive = false;
+                    }
+                }
+                else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter && isSearchActive) {
+
+                    std::string itemName = searchInput.getString().toAnsiString();
+
+                    if (xmlParser.getRoot() != nullptr) {
+                        Tree<File*>* foundNode = xmlParser.findItem(itemName, xmlParser.getRoot(), "");
+
+                        if (foundNode != nullptr) {
+                            // string fullPath = xmlParser.getFullPath(foundNode);
+                            // infoToDisplay = "File/Folder found: " + fullPath;
+                        }
+                        else {
+                            std::cout << "File/Folder not found." << std::endl;
+                            infoToDisplay = "File/Folder not found.";
+                        }
+
+
+                        searchInput.setString("");
+                        isSearchActive = false;
+                    }
+                }
+
+
+                else {
+
+                    sf::FloatRect searchBoxBounds = searchBox.getGlobalBounds();
+                    isSearchActive = searchBoxBounds.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                }
             }
         }
-
-        if (event.type == sf::Event::MouseWheelScrolled) {
+        else if (event.type == sf::Event::MouseWheelScrolled) {
             if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                 yOffset -= event.mouseWheelScroll.delta * ScrollSpeed;
             }
@@ -187,8 +283,19 @@ int main() {
     float scaleFactor = 2.0f;
     float yOffset = 0.0f;
 
+    bool isSearchActive = false;
+    sf::Text searchInput("", font, 14 * scaleFactor);
+    searchInput.setPosition(10, 240);
+    searchInput.setFillColor(sf::Color::Black);
+
+    sf::RectangleShape searchBox(sf::Vector2f(BottomWidth, BottomHeight));
+    searchBox.setFillColor(sf::Color::Yellow);
+    searchBox.setPosition(10, 240);
+
     while (window.isOpen()) {
-        if (!handleEvent(xmlParser, yOffset, infoToDisplay, isFirstBottomClicked)) {
+        if (!handleEvent(xmlParser, yOffset, infoToDisplay, isFirstBottomClicked, isSearchActive, searchInput, searchBox)) {
+            // if (!handleEvent(xmlParser, yOffset, infoToDisplay, isFirstBottomClicked)) {
+
             break;
         }
 
@@ -197,10 +304,12 @@ int main() {
         drawBottoms();
 
         if (isFirstBottomClicked && xmlParser.getRoot() != nullptr) {
-            float finalY = drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 7, 200 + yOffset, 10, scaleFactor);
+            float finalY = drawTreeLabelsRecursive(window, xmlParser.getRoot(), WindowWidth / 7, 200 + yOffset, 20, scaleFactor);
         }
 
         drawInfo(infoToDisplay, 300, 100, scaleFactor, !isFirstBottomClicked);
+
+        drawSearchBox(window, searchInput, searchBox, isSearchActive);
 
         window.display();
     }
